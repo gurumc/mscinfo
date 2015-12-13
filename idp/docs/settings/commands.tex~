@@ -1,0 +1,14 @@
+% Basic information for cover & title page
+\newcommand*{\getUniversity}{Technische Universität München}
+\newcommand*{\getFaculty}{Department of Informatics}
+\newcommand*{\getFacultysec}{Department of Informatics}
+\newcommand*{\getTitle}{Inter Disciplinary Project}
+\newcommand*{\getTitleGer}{TODO: Titel der Abschlussarbeit}
+\newcommand*{\getAuthor}{Gurusiddesha Chandrasekhara}
+\newcommand*{\getDoctype}{Documentation of Group 2}
+\newcommand*{\getSupervisor}{Prof. Dr.-Ing. Ulf Schlichtmann}
+\newcommand*{\getAdvisor}{Yong Hu}
+\newcommand*{\getSubmissionDate}{31.7.15}
+\newcommand*{\getSubmissionLocation}{Munich}
+\newcommand{\quelle}[1]{\footnotesize{Source:$\enspace$\url{#1}}}
+% TODO: add custom commands etc.
