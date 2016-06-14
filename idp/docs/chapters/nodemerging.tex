@@ -1,7 +1,8 @@
 \chapter{Node Merging} \label{nodemerging}
+	This chapter explains the process of node merging and the VF2 algorithm in detail.
 
 \section{Node Merging Implementation}
-General process of node merging follows like this. Application of rule gives a new graph and it needs to be compared with the existing tree nodes(graphs). If we find that this node exists already, we just add a edge to that node otherwise create a new node. The corresponding code listing can be seen below.
+In graph transformation, rules are applied on the host graph and the resulting graphs are represented as nodes of a tree. When the application of a rule gives a new graph (node), it needs to be compared with the existing tree nodes. If that node exists already, an edge is added to that node, otherwise, a new node is created. The corresponding code listing can be seen below.
 
 \begin{lstlisting}[language = Java,frame = single]
  for(E rule: rules){
@@ -31,64 +32,180 @@ General process of node merging follows like this. Application of rule gives a n
 
 \section{Graph Matching}
 Two graphs are said to be isomorphic if they have the vertices connected in the same way. Formally, two graphs $G$ and $H$ with graph vertices $V_n =\{1,2,...,n\}$ are said to be isomorphic if there is a permutation $p$ of $V_n$ such that $\{u,v\}$ is in the set of graph
-edges $E(G)$ iff $\{p(u),p(v)\}$ is in the set of graph edges $E(H)$.
-%Quote: http://mathworld.wolfram.com/IsomorphicGraphs.html
+edges $E(G)$ iff $\{p(u),p(v)\}$ is in the set of graph edges $E(H)$ \cite{iso1}.
 
-Exact graph matching or graph isomorphism problem is the computational problem of determining whether two finite graphs are isomorphic.graph isomorphism algorithms importance is very high in multiple fields such as electronic design automation, Chemistry and molecular biology etc.
+Exact graph matching or graph isomorphism problem is the computational problem of determining whether two finite graphs are isomorphic. The importance of Graph isomorphism algorithms is very high in multiple fields, such as electronic design automation, chemistry and molecular biology etc.
 
 \subsection{Complexity}
 Besides its practical importance, the graph isomorphism problem is a curiosity in computational complexity theory as it one of a
 very small number of problems belonging to NP, neither known to be solvable in polynomial time nor NP-complete. At the same time, isomorphism
-for many special classes of graphs can be solved in polynomial time and in practice, graph isomorphism can often be solved efficiently.
-%https://cs.anu.edu.au/people/Brendan.McKay/nauty/PGI/
+for many special classes of graphs can be solved in polynomial time and in practice, graph isomorphism can often be solved efficiently \cite{iso2}.
 This is a special case of the subgraph isomorphism problem, which is known to be NP-complete. However Laszlo Babai has claimed that the 
-Graph Isomorphism can be solved in quasipolynomial time. Quantities which are exponential in some power of a logarithm are called “quasipolynomial.”
-%http://jeremykun.com/2015/11/12/a-quasipolynomial-time-algorithm-for-graph-isomorphism-the-details/
+Graph Isomorphism can be solved in quasipolynomial time. Quantities which are exponential in some power of a logarithm are called “quasipolynomial” \cite{iso3}.
 
 \subsection{Negative checks}
-Before going into the algorithm, so called negative checks can be performed to avoid the process of going into the matching algorithm.
+Before going into the algorithm, negative checks can be performed to avoid the graph matching algorithm and yield faster results.
 \begin{enumerate}
 \item \texttt{Vertex number equivalence:} The number of vertices should be equal
 
 \item \texttt{Edge Count equivalence:} The sum of the edges should be equal
 
-\item \texttt{Edge order check:} This is one of the important checks since, when the graphs don't change much, the edge and vertices numbers may not change. Therefore, sorting the edge arrays and 
-comparing them will give a good candidates for matching algorithm.
+\item \texttt{Edge order check:} This is one of the important checks because when the graphs don't change much, the edge and vertices numbers may not change. Therefore, sorting the edge arrays and comparing them will give good candidates for the matching algorithm.
 \end{enumerate}
 
 \section{VF2 Algorithm}
-Lot of algorithms exists to solve graph isomorphism problem, such as Ullman, nauty, VF2 etc. VF2 algorithm written by Italian scientists was chosen. VFLib developed by same people with the VF2 paper are good point to start writing the custom implementation. 
+Algorithms such as Ullman, NAUTY and VF2 can be used to solve the graph isomorphism problem. The VF2 algorithm is one of the fastest algorithms for graphs containing many vertices. The software VFLib and the VF2 algorithm are good starting points for writing the custom implementation. 
 
-VFLib defines a single interface (State) that a variety of subgraph isomorphism matchers can implement in order for it to work interchangeably. Understand the VF2 algorithm itself was a big challenge. One of the ways to understand any graph matching algorithm is to understand the commonalities among all of the approaches currently used. Below are the some of the listings of some possibilities. 
+The VFLib defines a single interface (state) that a variety of subgraph isomorphism matchers can implement in order for it to work interchangeably. The challenges faced during this implementation  were firstly, to understand the intricate VF2 algorithm and secondly, customizing the algorithm to the current problem. One of the ways to understand any graph matching algorithm is to understand the commonalities among all of the approaches currently used . 
 
+A note on the terminology: In graph comparison one graph will be compared to another, can be denoted as graph1 and graph2 or source graph and target graph. 
+
+The commonalities among all graph matching algorithms are:\cite{ric}
 \begin{itemize}
 \item \texttt{Recursion:} Any implementation typically has a method that calls itself
-\item\texttt{State accumulation:} The recursive method gradually building up a map of nodes from source 
-graph to target graph, one pair of nodes at a time. Sometime it fails, so it needs to go back to last successful match (backtrack). When it succeeds and needs to report success.
-\item \texttt{Mapping:} The implementation typically uses an internal map to keep track of what it's done. So getting getting mapped nodes is easy.
+
+\item\texttt{State accumulation:} The recursive method gradually builds up a map of nodes from source graph to target graph, one pair of nodes at a time. Sometime it fails, so it needs to go back to last successful match (backtrack). When it succeeds and needs to report success.
+
+\item \texttt{Mapping:} The implementation typically uses an internal map to keep track of what it's done. So getting mapped nodes is easy.
 \end{itemize}
  
 \begin{figure}
 \centerline{
 \includegraphics[width=1.0\columnwidth]{figures/vf2_image.png}
 }
-\caption{VF2 algorithm}
-% Quote VF2 paper
+\caption{VF2 algorithm }
 \label{vf2}
 \end{figure}
 
-The basic idea behind VF2 is that, it tries to find the mapping of vertices between two graphs. 
+The basic idea behind the VF2 algorithm is that it tries to find the mapping of vertices between two graphs. 
 This process of finding the mapping function can be suitably
-described by State Space Representation (SSR). 
-%refer vf2 paper
-Each state s of the matching process can be associated to a partial
-mapping solution M(s), which contains only subset of the complete mapping. A transition from a generic states to a successor state s', represents the addition of a pair of matched nodes to partial mapping associated to s in the SSR. The algorithm explores the search graph in the SSR according to a depth-first search strategy. 
+described by \textit{State Space Representation (SSR)} \cite{vf2}.
+Each state $s$ of the matching process can be associated to a partial mapping solution $M(s)$, which contains only subset of the complete mapping. A transition from a generic states to a successor state $s'$, represents the addition of a pair of matched nodes to partial mapping associated to s in the SSR. The algorithm explores the search graph in the SSR according to a depth-first search strategy. 
 
-In figure \ref{vf2}, the Match(s) procedure plays the role of recursive function, while s and s' play the dual role of state accumulators and feature comparators. P(s) represents the set of candidates to be added to state s. There are set of feasibility rules can be defined to check the consistency condition. These rules can be both syntactic(depend only on the structure of the graph) and semantic (depends on the attributes of nodes and edges).
+In figure \ref{vf2}, the Match(s) procedure plays the role of recursive function, while $s$ and $s'$ play the dual role of state accumulators and feature comparators. $P(s)$ represents the set of candidates to be added to state $s$. A set of feasibility rules can be defined to check the consistency condition. These rules can be both syntactic(depend only on the structure of the graph) and semantic (depend on the attributes of nodes and edges).
+
+\subsection{Tracing of VF2 algorithm}
+
+This section explains the tracing process of the VF2 algorithm. Consider two simple graphs $g1$ and $g2$ (Figure \ref{tikz1}) and assume that node $1$ is equivalent to $a$, $2$ is equivalent to $b$ and so on, both semantically and syntactically (color property). We have a candidate list (all possible mappings) and a $map$, which has the partial mappings from g1 and g2. Whenever the $map$ size is equal to number of vertices in the graph, we stop the algorithm and return success.
+
+\texttt{Successful match:}\\
+
+ \begin{tikzpicture} 
+[scale=.5,auto=left,every node/.style={circle,fill=blue!20}]
+  	\node (n5) at (1,10) {5};
+    \node (n4) at (4,10)  {4};
+    \node (n3) at (7,10)  {3};
+    \node (n1) at (4,8)   {1};
+    \node (n2) at (4,6)  {2};
+    \node (n6) at (1,4)  {6};
+    \node (n7) at (7,4)  {7};
+
+  \foreach \from/\to in {n5/n1,n4/n1,n3/n1,n2/n1,n2/n6, n2/n7}
+    \draw (\from) -- (\to);
+
+  	\node (n5) at (14,10) {e};
+    \node (n4) at (18,10)  {d};
+    \node (n3) at (21,10)  {c};
+    \node (n1) at (18,8)   {a};
+    \node (n2) at (18,6)  {b};
+    \node (n6) at (15,4)  {f};
+    \node (n7) at (21,4)  {g};
+  
+  \foreach \from/\to in {n5/n1,n4/n1,n3/n1,n2/n1,n2/n6, n2/n7}
+    \draw (\from) -- (\to);
+
+ \end{tikzpicture}
+ \captionof{figure}{Graph g1 (left) and Graph g2 (right) for comparison}
+    \label{tikz1}
+%\end{left}
+
+Before the start of the algorithm, $map$ is $null$. The algorithm consists of the following steps:
+
+\begin{itemize}
+\item \texttt{Step 1:} Create initial state that has all the possible vertex combinations as a candidate list.\\ 
+Candidate list for initial match is:  $\{ (1,a) (1,b) (1,c)... (7,g)\}$ \\
+We remove a candidate from the candidate list and check for feasibility. The feasibility rules checks if the current candidate can be added to the $map$.\\
+
+\item \texttt{Step 2:} We get a match for (1,a). We add this to $map$ and create a new state with a new candidate list (combinations of neighbors of 1 and a).\\
+$map$ = \{(1,a)\} \\
+candidate list = \{(5,e) (5,d)(5,b)..... (2,b)\}\\
+Then, the match procedure is called on this new state. 
+
+\item \texttt{Step 3:} A match is found between (5,e). This is added to $map$ and a new candidate list is generated and the match procedure is called. 
+$map$ = \{(1,a) (5,e)\}\\
+candidate list = \{ \}.
+
+\item \texttt{Step 4:} Now the candidate list is empty, so now it backtracks. In backtracking, it checks if the head(5) and all of its neighbors are mapped (in this case, it is true) and returns to the previous step. Now, the state is denoted as:\\ 
+$map$ = \{(1,a) (5,e)\}\\
+candidate list = \{(4,d)(4,b)..... (2,b)\} --> Notice that (5,e) (5,d) etc have been removed
+
+\item \texttt{Step 5:} Check the feasibility of next candidate and continue until the map size is equal to number of vertices.\\ 
+.\\
+.\\
+.\\
+\item {\texttt{Step n:}} The size of $map$ is equal to the number of vertices. Return true.
+\end{itemize}
+
+\texttt{Unsuccessful match:}\\\\
+ \begin{tikzpicture} 
+[scale=.5,auto=left,every node/.style={circle,fill=blue!20}]
+  	\node (n5) at (1,10) {5};
+    \node (n4) at (4,10)  {4};
+    \node (n3) at (7,10)  {3};
+    \node (n1) at (4,8)   {1};
+    \node (n2) at (4,6)  {2};
+    \node (n6) at (1,4)  {6};
+    \node (n7) at (7,4)  {7};
+
+  \foreach \from/\to in {n5/n1,n4/n1,n3/n1,n2/n1,n2/n6, n2/n7}
+    \draw (\from) -- (\to);
+
+  	\node (n5) at (14,10) {e};
+    \node (n4) at (18,10)  {d};
+    \node (n3) at (21,10)  {c};
+    \node (n1) at (18,8)   {a};
+    \node (n2) at (18,6)  {b};
+    \node (n6) at (15,4)  {f};
+    \node[fill = red] (n7) at (21,4)  {g};
+  
+  \foreach \from/\to in {n5/n1,n4/n1,n3/n1,n2/n1,n2/n6, n2/n7}
+    \draw (\from) -- (\to);
+
+ \end{tikzpicture}
+ \captionof{figure}{Graph g1  (on the left) and Graph g2(on the right) for comparison}
+    \label{tikz}
+
+Now, we have two graphs of the same structure but differing in their node properties. The algorithm runs like this. 
+Consider we are in a step where the state looks like this, \\
+$map$ = \{ (1,a) (2,b) (6,f)\}\\
+candidate list  = \{(7,g)\} \\
+
+At this stage, it removes (7,g) from the candidate list to check for feasibility, but it does not match. It then goes back to the previous step ($2$) and checks if all of its neighbors are mapped. Since nodes $7$ and $g$ are not mapped, the algorithm removes 2 and 6 from the mapping and continues with a different part of the graph where it hopes to find the mapping for $b$. When all possible mappings are exhausted, the algorithm returns false. 
+
+\subsection{Improvements to original algorithm}
+A few improvements or changes were done to the original algorithm in order to suit for the current graphs. In the current graphs, we have strict node properties, and node properties should match for the graphs to be equal. 
+
+\begin{itemize}
+\item \texttt{Change 1: Using matchedNodeCandidates data structure}
+\begin{lstlisting}[language = Java,frame = single]
+/*  holds the matched source nodes for each node in the target graph */
+public Map<EObject, Set<EObject>> matchedNodeCandidates; 
+\end{lstlisting}
+
+Before we start the match procedure, we check if a node from the target graph has any matching node in the source graph. If we do not find at least one match, then the matching process can be stopped.
+
+\item \texttt{Change 2: Selecting the start node}\\
+The traditional implementation takes the combination of all possible vertices as the initial candidate list. An improvement made to select a unique node candidate as the start node, which is a node having only one matching between source and target graph.
+
+\item \texttt{Change 3: Backtracking}\\
+Our program spends a lot of time backtracking, as this is an essential part to find the appropriate match. But, if the necessary checks are not carried out, this can increase the time significantly. If the head is mapped, that is when we have mapped the candidate and all of its neighbors successfully, then we safely go back to the previous step keeping the current mappings. If these conditions fail, then we remove the last mapped candidate and continue the process.
+
+There is one more important check that needs to be carried out to avoid backtracking to a great extent. Since we have \textit{matchedNodeCandidates}, we can effectively determine if the removal of the last matched candidate and continuing the algorithm would yield the result. To remove the last successful match, there should be different vertices to match these candidate vertices. If we don't have any, then backtracking should be stopped, since there can be no vertices which can be mapped to the candidate vertices.
+
+\end{itemize}
 
 \subsection{Implementation}
-In the present work basic idea of VF2 is preserved, while lot of modifications were made for the
-practical purpose. Hereinafter graph1 is mentioned as source graph and graph2 as target graph.
+In the present work, the basic idea of the VF2 algorithm is preserved, while a lot of modifications were made for the practical purpose.
  
 \begin{figure}
 \centerline{
@@ -101,8 +218,6 @@ practical purpose. Hereinafter graph1 is mentioned as source graph and graph2 as
 Figure \ref{folder} shows the VF2 implementation in the current project.
 As seen in the figure \ref{folder}
 IsomorphismTester.java is an interface which defines a function which will be implemented in VF2IsomorphismTester.java.
-\\
-\\
 \\
 \\
 
@@ -118,7 +233,7 @@ boolean areIsomorphic(Graph<EObject, EClass> g1, Graph<EObject, EClass> g2);
 State.java is an interface, which corresponds to the state s of the VF2 algorithm. VF2State.java implements State interface. 
 \\
 
-Before explaining the functions, some of the data structures used are,
+Some of the data structures used are,
 
 \begin{lstlisting}[language = Java,frame = single]
 /*possible candidates to add it to state */
@@ -126,40 +241,10 @@ private ArrayList<Pair<EObject>> candidates;
 	
 private ArrayList<EObject> sourcePath; // Holds matched vertices of source
 private ArrayList<EObject> targetPath; // Holds matched vertices of target
-	
-/*  holds the matched source nodes for each node in the target graph */
-public Map<EObject, Set<EObject>> matchedNodeCandidates; 
-	
+
 \end{lstlisting}
 
 VF2IsomorphismTester.java defines match procedure along with implementing areIsomorphic() function. 
-
-\begin{lstlisting}[language = Java,frame = single]
-boolean areIsomorphic(Graph<EObject,EClass> g1, Graph<EObject, EClass> g2)
-{
-	State state = new VF2State(g1,g2);
-		
-	if(!state.checkIndividualMatch()){
-		System.out.println("VF2: Individual nodes cann't be matched");
-		return false;
-	}
-	maps.clear();
-	match(state);
-		
-	if(!maps.isEmpty()){
-		if(maps.get(0).size() == g1.getVertexCount()) 
-		return true;
-	}
-	return false;
-}
-\end{lstlisting}
-
-
-An empty state is created initially, in which the initial candidate is selected as opposed to loading every possible vertex match. A little optimization is carried out to identify a uniques start node(vertex should have only one match in source and target). A further optimization would be to check to see if it has unique neighbors.
-
-\texttt{state.checkIndividualMatch()}, checks if every vertex can be matched between source and target, this is an interesting check since, for each vertex in source we need to have at least one matching vertex in the target.
-
-After this, match function is called. The result is returned based on the number of mapped vertices.
 
 \begin{lstlisting}[language = Java,frame = single]
 private boolean match(State s) {
@@ -193,81 +278,23 @@ private boolean match(State s) {
 s.isGoal() returns true if all vertices are mapped.\\
 s.isDead() returns false when vertex number mismatch happens. 
 
-After the necessary checks, it choses the initial candidate as our start node pair and checks for feasibility of the candidate. And if it is a feasible candidate a next state is created, with the current candidate will be added to map.
-And match procedure will be called on the next state. Once we run out of candidates match function returns and checks for backtracking, if it is a successful backtrack matching continues else match will terminate by returning false. \\
-
-\texttt{Feasibility Function Listing}
-\begin{lstlisting}[language = Java,frame = single]
-public boolean isFeasiblePair(Pair<EObject> match) {
-		
-		if(map.containsKey(match.getFirst()) 
-		|| map.containsValue(match.getSecond()))
-		{
-			return false;
-		}
-		
-	Set<EObject> matchedNodes = matchedNodeCandidates.get(match.getSecond());
-		
-		if(!(matchedNodes.contains(match.getFirst())))
-				return false;
-				
-		if(!immNbrMatch(match)){
-					return false;
-		}
-		return true;
-		}		
-\end{lstlisting}
-In original VF2 algorithm there are lot of feasibility rules (semantic and syntactic) are applied before deciding the feasibility. The current graph structure does not lot of checking since we are concerned with node property matching as well. A check is carried out to make sure it is not already mapped and secondly if these candidate data can be matched and lastly if we can map its neighbors. This neighbor checking eliminated lot of potential duplicate candidates and avoid unnecessary backtracking.
+After the necessary checks, it choses the initial candidate as our start node pair and checks for feasibility of the candidate. And if it is a feasible candidate, a next state is created, with the current candidate added to $map$.
+And the match procedure is called on the next state. Once we run out of candidates, the match function returns and checks for backtracking. If it is a successful backtrack, the matching continues. Otherwise, match terminates by returning false. \\
 
 \texttt{s.nextState():}
-\texttt{s.nextState} returns a new VF2State, by copying all the previous state values and add the current candidate to the state. Additionally it loads the new candidates for matching, which are the combinations of neighbors of previous candidate. 
- 
-\texttt{Backtrack() Function Listing}
-\begin{lstlisting}[language = Java,frame = single]
-public boolean backtrack() {
-		if(sourcePath.isEmpty() || isGoal()){
-			map.clear();
-			return true;
-		}
-		if(isHeadMapped()){
-			return true;
-		}
-	
-		EObject last = targetPath.get(targetPath.size()-1);
-	
-		if(matchedNodeCandidates.get(last).size() == 1){
-			return false;
-		}
-		map.clear();
-		
-		for(int i = 0; i<sourcePath.size() -1 ; i++)
-		{
-			map.put(sourcePath.get(i), targetPath.get(i));
-		}
-		return true;
-	}
-\end{lstlisting}
-Our program spends a lot of time backtracking since, this is essential part to find the appropriate match, but if the necessary checks are not carried out this can increase the time significantly. 
-First we check for conditions if its goal or if the mapping hasn't started at all. 
-If the head is mapped, which is when we have mapped the candidate and all of its neighbors successfully, then we safely go back to previous step keeping the current mappings. 
-If these conditions fail, then we remove the last mapped candidate and continue the process.
-
-There is one more important check needs to be carried out to avoid backtracking to a great deal. Since we have matchedNodeCandidates(map of all vertices matches between source and target) which can be used effectively to determine if removal of the last matched candidate and continuing would yield the result. To remove the last successful match, there should be different vertices to match for these candidate vertices. If we don't have any then we need to stop backtracking, since there can be no vertex which can be mapped to candidate vertices.
+\texttt{s.nextState} returns a new VF2State by copying all the previous state values and adding the current candidate to the state. Additionally, it loads the new candidates for matching, which are the combinations of neighbors of previous candidates. 
 
 \section{Results}
-The most of the comparisons were eliminated by negative checks and individual node matching step. For graph which has 315 nodes the time taken for successful match is 17 seconds and for unsuccessful match is 12.5 seconds. This is generally good result considering the setup time.
+Most of the comparisons were eliminated by negative checks and the individual node matching step. For a graph having 315 nodes, the time taken for a successful match is 17 seconds and for an unsuccessful match is 12.5 seconds. This is a good result considering the setup time.
 
 Figure \ref{result} shows the resulting graph obtained by node merge. 
 \begin{figure}
  \centerline{
  \includegraphics[width=1.0\columnwidth]{figures/result.png}
  }
- \caption{Resultant graph after node merge}
- % Quote VF2 paper
+ \caption{Resultant graph after node merge \cite{vf2}}
  \label{result}
  \end{figure}
  
-\section{conclusion}
-The implemented algorithm does a good job for exact graph matching, however it can also be used for subgraph isomorphism. The main time consuming part was to understand the algorithm and how it works so that exploiting this for the practical purpose becomes easier.
 
-The main time consuming part is where setting up the array of individual vertex map. Overall it is efficient for practical usage purpose where it exploits the graphs characteristics, however further improvements can be carried out, like making the interfaces to work on generic data structures which will be part of future work and with little changes it can be extended for subgraph isomorphism as well.  
+

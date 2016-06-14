@@ -1,30 +1,29 @@
 \chapter{Introduction}\label{chapter:introduction}
 
-Network on Chip (NoC) is a communication subsystem on an integrated circuit typically between intellectual property(IP) cores in a System on Chip(SoC). In the modern NoCs there are numerous possible topologies and similarly in the integration of IPs for SoCs there can a lot of possible architectures. 
+Network on Chip (NoC) is a communication subsystem on an integrated circuit typically between intellectual property(IP) cores in a System on Chip(SoC). In the modern NoCs there are numerous possible topologies and similarly in the integration of IPs for SoCs there can a lot of possible architectures \cite{noc}.
+%TODO citation
+In order to find the optimal solution, some algorithms model the system as a graph and then optimize it iteratively. Graph algorithms play an important role in the these optimizations, particularly in graph transformation or graph rewriting techniques.
 
-In order to find the optimal solution, some algorithms model the system as a graph and then optimize it iteratively. Graph algorithms play an important role in the these optimizations in particular graph transformation or graph rewriting techniques.
+Graph transformation concerns the technique of creating a new graph out of an original graph algorithmically. The basic idea is that the design is represented as a graph and the transformations are carried out based on transformation rules. Such rules consist of an original graph,
+a subgraph, which is to be matched on to the original graph, and a replacing graph, which will replace the matched subgraph. 
+Formally, a graph rewriting system usually consists of a set of graph rewrite rules of the form $L -> R$, with $L$, called the pattern graph (or left-hand side, LHS) and $R$, called the replacement graph (or right hand-side of the rule, RHS) \footnote{\url{https://en.wikipedia.org/wiki/Graph_rewriting}}. A graph rewrite rule is applied on the host graph by searching for an occurrence of the pattern graph and by replacing the found occurrence by an instance of the replacement graph.
 
-Graph transformation concerns the technique of creating a new graph out of an original graph algorithmically. The basic idea is that the,
-design is represented as graph and the transformations are carried out based on transformation rules. Such rules consist of an original graph,
-a subgraph which is to be matched on to the original graph and a replacing graph, which will replace the matched subgraph. 
-Formally, a graph rewriting system usually consists of a set of graph rewrite rules of the form $L -> R$, with $L$ being called the pattern graph (or left-hand side, LHS) and $R$ being called the replacement graph (or right hand-side of the rule, RHS). A graph rewrite rule is applied on the host graph by searching for an occurrence of the pattern graph and by replacing the found occurrence by an instance of the replacement graph.
-
-As we apply these series of rules (often interchangeably), the number of resultant graphs increase significantly, which means more designs. Sometimes there can be lot duplicates
-in the resultant graphs as we apply rules interchangeably. Therefore, we need to identify the potential duplicates in order to avoid unnecessary designs. Usually the rule applying process goes in layers and represents the resultant graphs as nodes of a tree. There should be a logic to identify repeated node(graph in a tree) and merge this resultant node with the existing node. This can be termed as \texttt{node merging} problem. 
+As we apply these series of rules (often interchangeably), the number of resultant graphs increases significantly, which means more designs. Sometimes there can be duplicates in the resultant graphs as we apply rules interchangeably. Therefore, we need to identify the potential duplicates in order to avoid unnecessary designs. Usually, the rule applying process goes in layers and represents the resultant graphs as nodes of a tree. There should be a logic to identify a repeated node(graph in a tree) and merge this resultant node with the existing node. This can be termed as \textit{node merging} problem. 
 
 \section{Tasks}
-As explained before, to do node merging, so we need to identify duplicates, we need to compare graphs. Now this problem became a exact graph matching or graph isomorphism problem. This calls for a fast, efficient and reliable graph isomorphism algorithm since, each time we apply a rule we get a new graph, which has to be compared with all the previously obtained graphs. 
-For example, we apply a rule and get graph $n$, which has to be compared with $n-1$ times. For n rules the number of comparisons given by \ref{compraison_number}, 
+For node merging, we need to compare graphs. Thus, this problem now becomes an exact \textit{graph matching} or \textit{graph isomorphism} problem. This calls for a fast, efficient and reliable graph isomorphism algorithm because a new graph is obtained every time a new rule is applied, and has to be compared with all the previously obtained graphs. 
+For example, we apply a rule and get graph $n$, which has to be compared with $n-1$ times. For $n$ rules, the number of comparisons is given by \ref{compraison_number}, 
 \begin{equation}
             n(n-1)/2 
         \label{compraison_number}
 \end{equation}
 
-In addition to node merging, a little work was carried out on creating a Graphical editor for changing and viewing NoCs. The NoC can be modeled using Eclipse Modeling Framework(EMF). 
-Graphical Modeling Framework (GMF) is an Eclipse Modeling Project, project that aims to provide a generative bridge between the Eclipse Modeling Framework and Graphical Editing Framework. 
+In addition to node merging, options for creating a Graphical editor for changing and viewing NoCs were explored. The NoC can be modeled using the Eclipse Modeling Framework(EMF). 
+The \textit{Graphical Modeling Framework} (GMF) is an Eclipse Modeling Project, and aims to provide a generative bridge between the Eclipse Modeling Framework and Graphical Editing Framework. 
 
-Chapter 2 discusses the details of node-merging such as logic, graph isomorphism problem and algorithm, results. 
-Chapter 3 discusses the introduction and possibility of using GMF in the current project.
-Chapter 4 gives conclusion and possible future work. 
+This IDP report is structured into four chapters. Chapter 1 provides an overview of the NoC and motivation for using the VF2 algorithm in node merging. 
+Chapter 2 discusses the details of node merging. This includes the graph isomorphism problem, the VF2 algorithm including tracing, the implementation and the results. 
+Chapter 3 explains the GMF, including the possibility of using it in further work, and the GrGen.NET systems. 
+Chapter 4 summarizes the conclusions drawn from this project and the limitations of this project. 
 
 
