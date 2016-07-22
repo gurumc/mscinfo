@@ -1,0 +1,6 @@
+if(EClass.all.size() == 1) {
+	var interconnect = EClass.all.first();
+	interconnect.name = "sobel_filter_top_0_INPUT_STREAM_to_axi_vdma_1_M_AXIS_MM2S";	
+} else {
+	"Input model must be ONE InterconnectionType model !!!".println();
+}

@@ -1,0 +1,2 @@
+var edge = new Edge;
+Edge.all.add(edge);

@@ -1,0 +1,8 @@
+var cpu = new ComponentInstanceType;
+var lib = new LibraryRefType;
+
+cpu.instanceName = "CPU_1";
+lib.name = "CPU";
+lib.library = "soc";
+cpu.componentRef=lib;
+ComponentInstanceType.all.add(cpu);

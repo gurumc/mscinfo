@@ -1,0 +1,8 @@
+var interconnect = new InterconnectionType;
+var interface1 = new Interface;
+interface1.componentRef = "wishbone_bus_0";
+var interface2 = new Interface;
+interface2.componentRef = "CPU_1";
+interconnect.activeInterface.add(interface1);
+interconnect.activeInterface.add(interface2);
+InterconnectionType.all.add(interconnect);

@@ -1,0 +1,2 @@
+var element = new EClass;
+EClass.all.add(element);

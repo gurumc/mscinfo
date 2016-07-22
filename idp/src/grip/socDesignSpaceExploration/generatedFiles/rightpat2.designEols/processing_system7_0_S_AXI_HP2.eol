@@ -1,0 +1,3 @@
+var busInterface = new BusInterfaceType;
+busInterface.name = "S_AXI_HP2";
+BusInterfaceType.all.add(busInterface);

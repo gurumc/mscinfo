@@ -1,0 +1,9 @@
+var instance = new ComponentInstanceType;
+instance.instanceName = "axi_vdma_1";
+var lib = new LibraryRefType;
+lib.vendor = "ARM";
+lib.library = "ip";
+lib.name = "axi_vdma";
+lib.version = "1.0";
+instance.componentRef=lib;
+ComponentInstanceType.all.add(instance);

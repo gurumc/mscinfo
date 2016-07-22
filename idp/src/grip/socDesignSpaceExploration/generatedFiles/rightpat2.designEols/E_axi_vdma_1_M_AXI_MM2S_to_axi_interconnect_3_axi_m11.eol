@@ -1,0 +1,6 @@
+if(EClass.all.size() == 1) {
+	var interconnect = EClass.all.first();
+	interconnect.name = "axi_vdma_1_M_AXI_MM2S_to_axi_interconnect_3_axi_m11";	
+} else {
+	"Input model must be ONE InterconnectionType model !!!".println();
+}

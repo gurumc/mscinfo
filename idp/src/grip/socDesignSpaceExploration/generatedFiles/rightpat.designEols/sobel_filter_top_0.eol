@@ -1,0 +1,9 @@
+var instance = new ComponentInstanceType;
+instance.instanceName = "sobel_filter_top_0";
+var lib = new LibraryRefType;
+lib.vendor = "ARM";
+lib.library = "ip";
+lib.name = "sobel_filter_top";
+lib.version = "1.0";
+instance.componentRef=lib;
+ComponentInstanceType.all.add(instance);

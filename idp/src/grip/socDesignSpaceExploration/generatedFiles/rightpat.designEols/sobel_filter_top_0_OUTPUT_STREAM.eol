@@ -1,0 +1,3 @@
+var busInterface = new BusInterfaceType;
+busInterface.name = "OUTPUT_STREAM";
+BusInterfaceType.all.add(busInterface);

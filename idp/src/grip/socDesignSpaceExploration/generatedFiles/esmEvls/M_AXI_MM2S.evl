@@ -1,0 +1,50 @@
+context EObject{
+	
+	constraint size {		
+		check : self->size() = 1 
+	}
+	
+	constraint type {
+		guard: self.satisfies("size")		
+		check : BusInterfaceType.all.size() = 1		
+	}
+
+}
+
+context BusInterfaceType{
+
+	constraint name {
+		check: self.name = "FreeMarker template error (DEBUG mode; use RETHROW in production!):
+The following has evaluated to null or missing:
+==> getBusRef  [in template "freemarkerTemplates/validation/busInterfaceEvl.ftl" at line 19, column 39]
+
+----
+Tip: If the failing expression is known to be legally refer to something that's sometimes null or missing, either specify a default value like myOptionalVar!myDefault, or use <#if myOptionalVar??>when-present<#else>when-missing</#if>. (These only cover the last step of the expression; to cover the whole expression, use parenthesis: (myOptionalVar.foo)!myDefault, (myOptionalVar.foo)??
+----
+
+----
+FTL stack trace ("~" means nesting-related):
+	- Failed at: ${getBusRef()}  [in template "freemarkerTemplates/validation/busInterfaceEvl.ftl" at line 19, column 37]
+----
+
+Java stack trace (for programmers):
+----
+freemarker.core.InvalidReferenceException: [... Exception message was already printed; see it above ...]
+	at freemarker.core.InvalidReferenceException.getInstance(InvalidReferenceException.java:131)
+	at freemarker.core.UnexpectedTypeException.newDesciptionBuilder(UnexpectedTypeException.java:77)
+	at freemarker.core.UnexpectedTypeException.<init>(UnexpectedTypeException.java:40)
+	at freemarker.core.NonMethodException.<init>(NonMethodException.java:46)
+	at freemarker.core.MethodCall._eval(MethodCall.java:84)
+	at freemarker.core.Expression.eval(Expression.java:78)
+	at freemarker.core.Expression.evalAndCoerceToString(Expression.java:82)
+	at freemarker.core.DollarVariable.accept(DollarVariable.java:41)
+	at freemarker.core.Environment.visit(Environment.java:324)
+	at freemarker.core.MixedContent.accept(MixedContent.java:54)
+	at freemarker.core.Environment.visit(Environment.java:324)
+	at freemarker.core.Environment.process(Environment.java:302)
+	at freemarker.template.Template.process(Template.java:325)
+	at de.tum.ei.eda.esl.grip.ipxactRuleTrafoEpsilon.IpxactToEpsilonLHS.generateEvlWithFreemarker(IpxactToEpsilonLHS.java:277)
+	at de.tum.ei.eda.esl.grip.ipxactRuleTrafoEpsilon.JungNodestoPatternNE.transformToPatterNE(JungNodestoPatternNE.java:83)
+	at de.tum.ei.eda.esl.graphRewriter.searchTreeExploration.GraphComparator.isGraphIsomorphism(GraphComparator.java:257)
+	at de.tum.ei.eda.esl.graphRewriter.searchTreeExploration.GraphComparator.compare(GraphComparator.java:49)
+	at de.tum.ei.eda.esl.grip.socDesignSpaceExploration.TestOnePairComparison.main(TestOnePairComparison.java:198)

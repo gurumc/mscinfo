@@ -1,0 +1,19 @@
+context EObject{
+	
+	constraint size {		
+		check : self->size() = 1 
+	}
+	
+	constraint type {
+		guard: self.satisfies("size")		
+		check : InternalPortReferenceType.all.size() = 1		
+	}
+
+}
+
+context InternalPortReferenceType{
+
+	constraint name {
+		check: self.portRef = "FCLK_CLK0"
+	}
+}

@@ -1,0 +1,12 @@
+context EObject{
+	
+	constraint size {		
+		check : self->size() = 1 
+	}
+	
+	constraint type {
+		guard: self.satisfies("size")		
+		check : self.isKindOf(Edge)
+	}
+
+}

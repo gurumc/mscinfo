@@ -1,0 +1,330 @@
+package de.tum.ei.eda.esl.graphRewriter.searchTreeExploration;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.spiritconsortium.xml.schema.spirit.spirit.ComponentInstanceType;
+import org.spiritconsortium.xml.schema.spirit.spirit.DesignType;
+
+import de.tum.ei.eda.esl.graphRewriter.engine.engineCore.GraphMatcher;
+import de.tum.ei.eda.esl.graphRewriter.engine.engineCore.Match;
+import de.tum.ei.eda.esl.graphRewriter.engine.engineCore.Rule;
+import de.tum.ei.eda.esl.graphRewriter.engine.engineCore.engineInterface.PatternNE;
+import de.tum.ei.eda.esl.grip.ipxactJungTrafo.JungGraphToDesign;
+import de.tum.ei.eda.esl.grip.ipxactRuleTrafoEpsilon.IpxactToEpsilonLHS;
+import edu.uci.ics.jung.graph.Graph;
+
+public class GraphComparator<V,E> implements NodeComparator<Graph<V,E>>{
+	//private hostGraphToPatternGraphTrans trans
+	//patternGraph = trans.transform(hostGraph)
+	Graph<EObject, EClass> source = null; 
+	Graph<EObject, EClass> target = null; 
+	
+	@SuppressWarnings("unchecked")
+	public boolean compare(Graph node1, Graph node2) {
+		// TODO Auto-generated method stub
+		this.source = (Graph<EObject, EClass>) node1;
+		this.target = (Graph<EObject, EClass>) node2;
+		
+		if(!matcheEdgeList())
+		{
+			System.out.println("edge list doesn't match, source and target");
+			return false;
+		}
+		//validate the graphs
+//		source = validateIPxactDesign(source);
+		target = validateIPxactDesign(target);
+		//hostgraph- >design -> patterngr
+		//Function -? 
+		JungGraphToDesign jungGraphToDesign = new JungGraphToDesign();
+		DesignType tgtDesign = jungGraphToDesign.exportToDesign(target);
+		
+		IpxactToEpsilonLHS ipxactToEpsilonLHS = new IpxactToEpsilonLHS();
+		
+		Graph<PatternNE, PatternNE> lhs = ipxactToEpsilonLHS.transformToLHSGraph(tgtDesign);
+		
+		if(!matcheEdgeList(source, lhs))
+		{
+			System.out.println("edge list doesn't match, source and lhs");
+			return false;
+		}
+		//Now we have got the candidates for graph matching
+		GraphMatcher<EObject, EClass> matcher = new GraphMatcher<EObject, EClass>();
+		
+		
+		Rule rule = new Rule();
+		rule.setGraphletLhs(lhs);
+		
+		Set<Match<EObject, EClass>> matches = matcher.matchLHS(source, rule);
+		System.out.println("Comparator: matching done"); 
+		/* if all nodes and edges are matched then return true */
+		if(matches.size() > 0)
+		{
+			for(Match<EObject, EClass> match1:matches)
+			{
+				if(source.getEdgeCount() == match1.getMatchedEdges().size())
+				{
+					System.out.println("Comparator: match found"); 
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	/*
+	 * Method to match the edge lists
+	 */
+	boolean matcheEdgeList()
+	{
+		int [] src = new int[source.getVertexCount()];
+		int [] tgt = new int[target.getVertexCount()];
+		int i = 0;
+
+		//vertex and edge check
+		if(source.getVertexCount() != target.getVertexCount() || source.getEdgeCount() != target.getEdgeCount())
+		{
+			System.out.println("source vertex ");
+			for(EObject vertex: source.getVertices())
+			{
+				if(vertex instanceof ComponentInstanceType) {
+				System.out.println(((ComponentInstanceType) vertex).getInstanceName());
+				}
+				
+			}
+			
+			System.out.println("target vertex ");
+			for(EObject vertex: target.getVertices())
+			{
+				if(vertex instanceof ComponentInstanceType) {
+					System.out.println(((ComponentInstanceType) vertex).getInstanceName());
+				}
+				
+			}
+			
+			return false;
+		}
+
+		for(EObject vertex: source.getVertices())
+		{
+			src[i++] = source.degree(vertex);
+		}
+		i = 0;
+		for(EObject vertex: target.getVertices())
+		{
+			tgt[i++] = target.degree(vertex);
+		}
+
+		Arrays.sort(src);
+		Arrays.sort(tgt);
+		//debug
+		for(int j = 0; j < src.length; j++)
+		{
+			System.out.println(src[j] + " == " + tgt[j]);
+		}
+
+		if(Arrays.equals(src, tgt))
+		{
+			return true;
+		}	
+		return false;
+	}
+
+	
+	boolean matcheEdgeList(Graph<EObject, EClass> source, Graph<PatternNE, PatternNE> target)
+	{
+		int [] src = new int[source.getVertexCount()];
+		int [] tgt = new int[target.getVertexCount()];
+		int i = 0;
+
+		//vertex and edge check
+		if(source.getVertexCount() != target.getVertexCount() || source.getEdgeCount() != target.getEdgeCount())
+		{
+			System.out.println("source vertex ");
+			for(EObject vertex: source.getVertices())
+			{
+				if(vertex instanceof ComponentInstanceType) {
+				System.out.println(((ComponentInstanceType) vertex).getInstanceName());
+				}
+				
+			}
+			
+			System.out.println("target vertex ");
+			for(PatternNE vertex: target.getVertices())
+			{
+				if(vertex instanceof ComponentInstanceType) {
+					System.out.println(((ComponentInstanceType) vertex).getInstanceName());
+				}
+				
+			}
+			
+			return false;
+		}
+
+		for(EObject vertex: source.getVertices())
+		{
+			src[i++] = source.degree(vertex);
+		}
+		i = 0;
+		for(PatternNE vertex: target.getVertices())
+		{
+			tgt[i++] = target.degree(vertex);
+		}
+
+		Arrays.sort(src);
+		Arrays.sort(tgt);
+		//debug
+		for(int j = 0; j < src.length; j++)
+		{
+			System.out.println(src[j] + " == " + tgt[j]);
+		}
+
+		if(Arrays.equals(src, tgt))
+		{
+			return true;
+		}	
+		return false;
+	}
+
+	/*  
+	 * Method to remove duplicate names in vertices (component instances) 
+	 * Only works ComponentInstanceType: Since at present we need only that
+	 * and can be easily expanded/better name modifications can be done
+	 */
+	private static Graph<EObject, EClass> validateIPxactDesign(Graph<EObject, EClass> graph)
+	{
+
+		HashSet<String> hset = new HashSet<String>();
+		for(EObject vertex:graph.getVertices())
+		{
+			if(vertex instanceof ComponentInstanceType)
+			{
+				String oldValue = ((ComponentInstanceType) vertex).getInstanceName();
+				if(hset.contains(oldValue))
+				{
+					oldValue = oldValue+"_2";
+					while(hset.contains(oldValue))
+					{
+						oldValue = oldValue+"_2";	
+					}
+					((ComponentInstanceType) vertex).setInstanceName(oldValue);
+				}
+				hset.add(oldValue);
+			}
+
+		}
+		return graph;
+	}
+	
+	/*
+	 * Temporary method to check isomorphism between two graphs
+	 * TODO: remove or continue with this method
+	 */
+	public boolean isGraphIsomorphism()
+	{
+		boolean isGraphIsomorphism = false;
+		boolean isSubgraphIsomorphicToGraph = false;
+		boolean isgraphIsomorphicToSubgraph = false;
+		
+		EObject subgraphStartNode =  getRandomStartNode( new ArrayList<EObject>(target.getVertices()) );
+		List<EObject> graphStartNodes = new ArrayList<EObject>(source.getVertices());
+		
+		for(int i = 0; i < graphStartNodes.size(); i++) { 
+			Map<EObject, EObject> subgraphToGraph = new HashMap<EObject, EObject>();
+			Map<EObject, EObject> graphToSubgraph = new HashMap<EObject, EObject>();
+			List<EObject> toMatch = Arrays.asList(subgraphStartNode, graphStartNodes.get(i));
+			
+			if(matchNodeForSingleMatch(toMatch, subgraphToGraph, graphToSubgraph, target, source)) {
+				isSubgraphIsomorphicToGraph = true; 
+				break;
+			}
+		}
+		
+		subgraphStartNode =  getRandomStartNode( new ArrayList<EObject>(source.getVertices()) );
+		graphStartNodes = new ArrayList<EObject>(target.getVertices());
+		
+		for(int i = 0; i < graphStartNodes.size(); i++) { 
+			Map<EObject, EObject> subgraphToGraph = new HashMap<EObject, EObject>();
+			Map<EObject, EObject> graphToSubgraph = new HashMap<EObject, EObject>();
+		List<EObject> toMatch = Arrays.asList(subgraphStartNode, graphStartNodes.get(i));
+		if(matchNodeForSingleMatch(toMatch, subgraphToGraph, graphToSubgraph, source, target)) {
+			isgraphIsomorphicToSubgraph = true; 
+			break;
+		}
+	}
+	
+	if(isSubgraphIsomorphicToGraph && isgraphIsomorphicToSubgraph)
+		isGraphIsomorphism = true;
+	
+	//set the startnode(s) back TODO: I dont need this
+			subgraphStartNode = getRandomStartNode( new ArrayList<EObject>(target.getVertices()) );	
+		    graphStartNodes = new ArrayList<EObject>(source.getVertices());
+			
+			return isGraphIsomorphism;	
+	}
+	
+	/* main function to check the graph isomorphism */
+	private boolean matchNodeForSingleMatch(List<EObject> toMatchs,
+			Map<EObject, EObject> subgraphToGraphs,
+			Map<EObject, EObject> graphToSubgraphs,
+			Graph<EObject, EClass> subgraph, Graph<EObject, EClass> graph) {
+		
+		//generate local copies
+				List<EObject> toMatch = new ArrayList<EObject>(toMatchs);
+				Map<EObject, EObject> subgraphToGraph = new HashMap<EObject, EObject>(subgraphToGraphs);
+				Map<EObject, EObject> graphToSubgraph = new HashMap<EObject, EObject>(graphToSubgraphs);
+		
+				boolean failure = false;
+				boolean success = true;
+				while( toMatch.size() != 0 ) {
+					EObject noder = toMatch.remove(0);
+					EObject nodes = toMatch.remove(0);
+					if(subgraphToGraph.containsKey(noder) && !graphToSubgraph.containsKey(nodes))
+			        	return failure;
+			        if(!subgraphToGraph.containsKey(noder) && graphToSubgraph.containsKey(nodes))
+			        	return failure;
+			        if(subgraphToGraph.containsKey(noder) && graphToSubgraph.containsKey(nodes)) {
+			        	if(subgraphToGraph.get(noder).equals(nodes) && graphToSubgraph.get(nodes).equals(noder)) {
+			        		//do nothing
+			        	}
+			        	else 
+			        		return failure;
+			        }
+			     // Here we can make checks whether noder and nodes should match
+			        if(!matchNodeContent(noder, nodes))
+			        	return failure;
+			        
+			      //record the injective match
+			        subgraphToGraph.put(noder, nodes); 
+			        graphToSubgraph.put(nodes, noder);
+			        
+			        for(EClass e: subgraph.getIncidentEdges(noder)){
+			        	EObject r = subgraph.getOpposite(noder, e);
+			        	List<EObject> candidateNodes = new ArrayList<EObject>
+			        	
+			        }
+				}
+				
+		
+
+	}
+	private boolean matchNodeContent(EObject noder, EObject nodes) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	private EObject getRandomStartNode(List<EObject> subgraphNodes) {
+		Random random = new Random(); 
+		//Generate a random number (index) with the size of the list being the maximum
+		int randomNumber = random.nextInt(subgraphNodes.size()); 
+		return subgraphNodes.get(randomNumber); 
+	}
+}

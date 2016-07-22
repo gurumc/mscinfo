@@ -1,0 +1,3 @@
+var busInterface = new BusInterfaceType;
+busInterface.name = "axi_m11";
+BusInterfaceType.all.add(busInterface);

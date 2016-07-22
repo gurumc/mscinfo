@@ -1,0 +1,2 @@
+var node = Node.createInstance();
+node.name = "createNewNode";

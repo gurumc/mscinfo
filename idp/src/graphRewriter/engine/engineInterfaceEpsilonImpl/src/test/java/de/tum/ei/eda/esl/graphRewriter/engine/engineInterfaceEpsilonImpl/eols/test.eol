@@ -1,0 +1,3 @@
+var node1 = new Node;
+node1.name = "newNode";
+Node.all.add(node1);

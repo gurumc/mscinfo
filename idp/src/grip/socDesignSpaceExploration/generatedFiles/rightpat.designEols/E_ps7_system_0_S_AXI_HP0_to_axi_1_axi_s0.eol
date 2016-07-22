@@ -1,0 +1,3 @@
+var element = new EClass;
+element.name = "ps7_system_0_S_AXI_HP0_to_axi_1_axi_s0";
+EClass.all.add(element);

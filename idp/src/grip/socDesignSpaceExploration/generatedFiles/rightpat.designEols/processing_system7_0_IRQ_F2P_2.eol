@@ -1,0 +1,5 @@
+var element = new InternalPortReferenceType;
+element.portRef = "IRQ_F2P";
+element.left = new Native("java.math.BigInteger")("2");
+element.right = new Native("java.math.BigInteger")("2");
+InternalPortReferenceType.all.add(element);

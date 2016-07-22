@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/testGraphEcoreModel/src" modelPluginID="testGraphEcoreModel"
+    modelName="NodesAndEdges" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>file:/nfs/TUEIEDAprojects/SystemDesign/work/nocs/YongHu/EclipseWorkspace/generative-grammar/junggraph/junggraph.testgraph.ecorestructure/model/nodesAndEdges.ecore</foreignModel>
+  <genPackages prefix="NodesAndEdges" disposableProviderFactory="true" ecorePackage="nodesAndEdges.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="nodesAndEdges.ecore#//Color">
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//Color/red"/>
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//Color/blue"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="nodesAndEdges.ecore#//EdgeViewType">
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//EdgeViewType/solidline"/>
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//EdgeViewType/dashline"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="nodesAndEdges.ecore#//Shape">
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//Shape/round"/>
+      <genEnumLiterals ecoreEnumLiteral="nodesAndEdges.ecore#//Shape/square"/>
+    </genEnums>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//ColoredNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//ColoredNode/color"/>
+      <genOperations ecoreOperation="nodesAndEdges.ecore#//ColoredNode/toString"/>
+    </genClasses>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//Node/name"/>
+    </genClasses>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//Node_toString"/>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//ColoredNode_toString"/>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//Edge">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//Edge/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//Edge/type"/>
+      <genOperations ecoreOperation="nodesAndEdges.ecore#//Edge/toString"/>
+    </genClasses>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//Edge_toString"/>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//ShapedNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//ShapedNode/size"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nodesAndEdges.ecore#//ShapedNode/shape"/>
+      <genOperations ecoreOperation="nodesAndEdges.ecore#//ShapedNode/toString"/>
+    </genClasses>
+    <genClasses ecoreClass="nodesAndEdges.ecore#//ShapedNode_toString"/>
+  </genPackages>
+</genmodel:GenModel>

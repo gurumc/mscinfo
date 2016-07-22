@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--Created by Kactus214:59:46 18.06.2014-->
+<spirit:design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:kactus2="http://funbase.cs.tut.fi/" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1.5" xsi:schemaLocation="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1.5 http://www.spiritconsortium.org/XMLSchema/SPIRIT/1.5/index.xsd">
+  <spirit:componentInstances>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_iic_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_IIC" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_1</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="bus" spirit:name="AXILITEBUS" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>util_vector_logic</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="UTIL_VECTOR_LOGIC" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_dma_spd</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_DMA" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>clkgen_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="CLKGEN" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_spdif_tx</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_SPDIF_TX" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_2</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="bus" spirit:name="AXIBUS_2" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_hdmi_tx_16b_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="HDMI" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>camera_interface_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="CAM_INTERFACE" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="bus" spirit:name="AXIBUS" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_vdma_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="VDMA" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_clkgen</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_CLKGEN" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_dma_i2s</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_DMA" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>ps7_system_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="CPU" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+    <spirit:componentInstance>
+      <spirit:instanceName>axi_i2s_adi_0</spirit:instanceName>
+      <spirit:displayName></spirit:displayName>
+      <spirit:description></spirit:description>
+      <spirit:componentRef spirit:library="ip" spirit:name="AXI_I2S_ADI" spirit:vendor="ARM" spirit:version="1.0"/>
+      <spirit:configurableElementValues/>
+    </spirit:componentInstance>
+  </spirit:componentInstances>
+  <spirit:interconnections>
+    <spirit:interconnection>
+      <spirit:name>axi_dma_i2s_S_AXI_LITE_to_axi_1_axil_s0</spirit:name>
+      <spirit:activeInterface spirit:busRef="axil_s0" spirit:componentRef="axi_1"/>
+      <spirit:activeInterface spirit:busRef="S_AXI_LITE" spirit:componentRef="axi_dma_i2s"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_dma_i2s_M_AXI_MM2S_to_axi_0_axi_m0</spirit:name>
+      <spirit:activeInterface spirit:busRef="M_AXI_MM2S" spirit:componentRef="axi_dma_i2s"/>
+      <spirit:activeInterface spirit:busRef="axi_m0" spirit:componentRef="axi_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_i2s_adi_0_S_AXI_to_axi_1_axil_s1</spirit:name>
+      <spirit:activeInterface spirit:busRef="axil_s1" spirit:componentRef="axi_1"/>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="axi_i2s_adi_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_i2s_adi_0_M_AXIS_S2MM_to_axi_dma_i2s_S_AXIS_S2MM</spirit:name>
+      <spirit:activeInterface spirit:busRef="M_AXIS_S2MM" spirit:componentRef="axi_i2s_adi_0"/>
+      <spirit:activeInterface spirit:busRef="S_AXIS_S2MM" spirit:componentRef="axi_dma_i2s"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>camera_interface_0_S_AXI_to_axi_1_axil_s10</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="camera_interface_0"/>
+      <spirit:activeInterface spirit:busRef="axil_s10" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_hdmi_tx_16b_0_S_AXI_to_axi_1_axil_s3</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="axi_hdmi_tx_16b_0"/>
+      <spirit:activeInterface spirit:busRef="axil_s3" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>ps7_system_0_S_AXI_HP1_to_axi_2_axi_s0</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI_HP1" spirit:componentRef="ps7_system_0"/>
+      <spirit:activeInterface spirit:busRef="axi_s0" spirit:componentRef="axi_2"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_dma_spd_S_AXI_LITE_to_axi_1_axil_s5</spirit:name>
+      <spirit:activeInterface spirit:busRef="axil_s5" spirit:componentRef="axi_1"/>
+      <spirit:activeInterface spirit:busRef="S_AXI_LITE" spirit:componentRef="axi_dma_spd"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_vdma_0_S_AXI_LITE_to_axi_1_axil_s11</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI_LITE" spirit:componentRef="axi_vdma_0"/>
+      <spirit:activeInterface spirit:busRef="axil_s11" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>clkgen_0_S_AXI_to_axi_1_axil_s4</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="clkgen_0"/>
+      <spirit:activeInterface spirit:busRef="axil_s4" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>ps7_system_0_S_AXI_HP0_to_axi_0_axi_s0</spirit:name>
+      <spirit:activeInterface spirit:busRef="axi_s0" spirit:componentRef="axi_0"/>
+      <spirit:activeInterface spirit:busRef="S_AXI_HP0" spirit:componentRef="ps7_system_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_vdma_0_M_AXIS_MM2S_to_axi_hdmi_tx_16b_0_M_AXIS_MM2S</spirit:name>
+      <spirit:activeInterface spirit:busRef="M_AXIS_MM2S" spirit:componentRef="axi_vdma_0"/>
+      <spirit:activeInterface spirit:busRef="M_AXIS_MM2S" spirit:componentRef="axi_hdmi_tx_16b_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_clkgen_S_AXI_to_axi_1_axil_s2</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="axi_clkgen"/>
+      <spirit:activeInterface spirit:busRef="axil_s2" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_dma_spd_M_AXI_MM2S_to_axi_0_axi_m5</spirit:name>
+      <spirit:activeInterface spirit:busRef="M_AXI_MM2S" spirit:componentRef="axi_dma_spd"/>
+      <spirit:activeInterface spirit:busRef="axi_m5" spirit:componentRef="axi_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_spdif_tx_S_AXI_to_axi_1_axil_s7</spirit:name>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="axi_spdif_tx"/>
+      <spirit:activeInterface spirit:busRef="axil_s7" spirit:componentRef="axi_1"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>ps7_system_0_M_AXI_GP0_to_axi_1_axil_m0</spirit:name>
+      <spirit:activeInterface spirit:busRef="axil_m0" spirit:componentRef="axi_1"/>
+      <spirit:activeInterface spirit:busRef="M_AXI_GP0" spirit:componentRef="ps7_system_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_iic_0_S_AXI_to_axi_1_axil_s9</spirit:name>
+      <spirit:activeInterface spirit:busRef="axil_s9" spirit:componentRef="axi_1"/>
+      <spirit:activeInterface spirit:busRef="S_AXI" spirit:componentRef="axi_iic_0"/>
+    </spirit:interconnection>
+    <spirit:interconnection>
+      <spirit:name>axi_vdma_0_M_AXI_MM2S_to_axi_2_axi_m1</spirit:name>
+      <spirit:activeInterface spirit:busRef="M_AXI_MM2S" spirit:componentRef="axi_vdma_0"/>
+      <spirit:activeInterface spirit:busRef="axi_m1" spirit:componentRef="axi_2"/>
+    </spirit:interconnection>
+  </spirit:interconnections>
+  <spirit:adHocConnections>
+    <spirit:adHocConnection>
+      <spirit:name>camera_interface_0_MUNISH</spirit:name>
+      <spirit:internalPortReference spirit:componentRef="camera_interface_0" spirit:left="0" spirit:portRef="CAMtempPort1" spirit:right="0"/>
+      <spirit:internalPortReference spirit:componentRef="ps7_system_0" spirit:left="0" spirit:portRef="CPUtempPort2" spirit:right="0"/>
+    </spirit:adHocConnection>
+    <spirit:adHocConnection>
+      <spirit:name>HW_acc1_0_tempPortHA_to_CPU4_0_tempPort</spirit:name>
+      <spirit:internalPortReference spirit:componentRef="ps7_system_0" spirit:left="0" spirit:portRef="CPUtempPort1" spirit:right="0"/>
+      <spirit:internalPortReference spirit:componentRef="axi_vdma_0" spirit:left="0" spirit:portRef="VDMA0tempPort1" spirit:right="0"/>
+    </spirit:adHocConnection>
+  </spirit:adHocConnections>
+</spirit:design>

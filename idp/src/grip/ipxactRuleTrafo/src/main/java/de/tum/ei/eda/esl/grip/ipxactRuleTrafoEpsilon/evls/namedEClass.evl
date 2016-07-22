@@ -1,0 +1,20 @@
+context EObject{
+	
+	constraint size {		
+		check : self->size() = 1 
+	}
+	
+	constraint type {
+		guard: self.satisfies("size")		
+		check : EClass.all.size() = 1		
+	}
+
+}
+
+context EClass{
+
+	constraint nameNotNull {
+		check: self.name.isDefined() = true
+	}
+	
+}

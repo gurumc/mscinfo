@@ -1,0 +1,23 @@
+if(ComponentInstanceType.all.size() == 1) {
+	var instance = ComponentInstanceType.all.first();
+	instance.instanceName = "axi_interconnect_0";
+	
+	if(instance.componentRef.isUndefined()) {
+		var lib = new LibraryRefType;
+		lib.vendor = "ARM";
+		lib.library = "bus";
+		lib.name = "axi_interconnect";
+		lib.version = "1.0";
+		instance.componentRef=lib;
+	} else {
+		var lib = instance.componentRef;
+		lib.vendor = "ARM";
+		lib.library = "bus";
+		lib.name = "axi_interconnect";
+		lib.version = "1.0";
+	}
+	
+} else {
+	"Input model must be ONE componentInstanceType model !!!".println();
+}
+

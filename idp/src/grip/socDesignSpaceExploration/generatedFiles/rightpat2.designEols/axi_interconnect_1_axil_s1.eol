@@ -1,0 +1,6 @@
+if(BusInterfaceType.all.size() == 1) {
+	var busInterface = BusInterfaceType.all.first();
+	busInterface.name = "axil_s1";
+} else {
+	"Input model must be ONE BusInterfaceType model !!!".println();
+}

@@ -1,0 +1,3 @@
+var element = new EClass;
+element.name = "processing_system7_0_FCLK_CLK3";
+EClass.all.add(element);

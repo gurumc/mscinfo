@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated nodesAndEdges -->
+      <package
+            uri="http:///de_tum_ei_eda_graphgrammar_junggraphmodel_testgraph_graphstructure/de/tum/ei/eda/graphgrammar/junggraphmodel/testgraph/graphstructure/nodesAndEdges.ecore"
+            class="nodesAndEdges.NodesAndEdgesPackage"
+            genModel="model/nodesAndEdges.genmodel"/>
+   </extension>
+
+</plugin>

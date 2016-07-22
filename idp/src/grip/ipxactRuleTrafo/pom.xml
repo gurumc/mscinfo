@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>de.tum.ei.eda.esl</groupId>
+    <artifactId>de.tum.ei.eda.esl.grip</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>de.tum.ei.eda.esl.grip.ipxactRuleTrafo</artifactId>
+  <name>ipxactRuleTrafo</name>
+  
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+	  <groupId>org.eclipse.emf</groupId>
+	  <artifactId>org.eclipse.emf.ecore</artifactId>
+	  <version>2.11.0-v20150123-0347</version>
+    </dependency>
+    <dependency>
+	  <groupId>org.eclipse.emf</groupId>
+	  <artifactId>org.eclipse.emf.common</artifactId>
+	  <version>2.11.0-v20150123-0347</version>
+    </dependency>
+    <dependency>
+	  <groupId>org.eclipse.core</groupId>
+	  <artifactId>runtime</artifactId>
+	  <version>3.10.0-v20140318-2214</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.eclipse.core</groupId>
+	  <artifactId>resources</artifactId>
+	  <version>3.3.0-v20070604</version>
+	</dependency>
+    
+    <dependency>
+	  <groupId>org.freemarker</groupId>
+	  <artifactId>freemarker</artifactId>
+	  <version>2.3.23</version>
+	</dependency>
+    
+    <dependency>
+	  <groupId>de.tum.ei.eda.esl</groupId>
+  	  <artifactId>de.tum.ei.eda.esl.grip.ipxact</artifactId>
+  	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>de.tum.ei.eda.esl</groupId>
+  	  <artifactId>de.tum.ei.eda.esl.grip.ipxactJungTrafo</artifactId>
+  	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>	
+	
+	<dependency>
+	  <groupId>de.tum.ei.eda.esl</groupId>
+      <artifactId>de.tum.ei.eda.esl.graphRewriter.engine.engineCore</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+		<dependency>
+	  <groupId>de.tum.ei.eda.esl</groupId>
+      <artifactId>de.tum.ei.eda.esl.graphRewriter.engine.engineInterfaceEpsilonImpl</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+  </dependencies>
+  
+  <build>
+  	<resources>  
+        <resource>  
+            <directory>src/main/resources</directory>  
+            <includes>  
+                <include>**/*.evl</include>  
+                <include>**/*.eol</include>  
+                <include>**/*.ftl</include>  
+            </includes>  
+            <filtering>false</filtering>  
+        </resource>  
+        <resource>  
+            <directory>src/main/java</directory>  
+            <includes>  
+                <include>**/*.evl</include>  
+                <include>**/*.eol</include>  
+                <include>**/*.ftl</include>  
+            </includes>  
+            <filtering>false</filtering>  
+        </resource>  
+    </resources> 
+  </build>
+  
+</project>

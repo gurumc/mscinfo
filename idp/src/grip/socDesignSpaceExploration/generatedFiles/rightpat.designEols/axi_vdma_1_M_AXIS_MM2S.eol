@@ -1,0 +1,3 @@
+var busInterface = new BusInterfaceType;
+busInterface.name = "M_AXIS_MM2S";
+BusInterfaceType.all.add(busInterface);

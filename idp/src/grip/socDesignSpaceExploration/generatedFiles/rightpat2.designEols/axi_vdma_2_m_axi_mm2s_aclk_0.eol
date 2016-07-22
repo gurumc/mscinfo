@@ -1,0 +1,5 @@
+var element = new InternalPortReferenceType;
+element.portRef = "m_axi_mm2s_aclk";
+element.left = new Native("java.math.BigInteger")("0");
+element.right = new Native("java.math.BigInteger")("0");
+InternalPortReferenceType.all.add(element);
