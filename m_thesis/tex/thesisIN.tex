@@ -1,0 +1,100 @@
+ % The main file for CAMP reports
+ % Don't put any content in here. 
+ % Don't even include content files by using \input or \inlcude. 
+ % Put your content to TEXT.TEX or include it there using \input.
+ % Uses:
+ %		SETTINGS.TEX	contains the settings for this document
+ %		COMMANDS.TEX	contains commands which can be used while writing
+ %		INFO.TEX			contains the author, title and so on for the cover
+ %		COVER.TEX			formats the front cover of the document
+ %		ABSTRACT.TEX	contains the abstract to be included (if needed)
+ %		TEXT.TEX			contains the actual content of the document
+ %		BIB.BIB				containt the BibTeX entries for the document
+ 
+ 
+%% Draft document mode
+%% Final document
+
+\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR12mm,DIV13]{scrbook}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{qtree}
+\usepackage{pgfplots, pgfplotstable, filecontents}
+\usepackage{algorithm,algorithmicx,algpseudocode}
+\usepackage{booktabs}
+\usepackage{placeins} % float barrier
+\usepackage{flafter}  %  ensures that floats don't appear until after they appear in the code.
+\pgfplotsset{compat=newest,width=13.5cm}
+
+% include title and author information for the cover
+\input{components/info}
+
+% include settings
+\input{components/settings}
+
+% include commands
+\input{components/commands}
+
+\makeglossary
+
+\begin{document}
+
+\frontmatter
+	
+\input{components/cover}
+
+\clearemptydoublepage
+	
+\input{components/titlepage}
+	
+\input{components/disclaimer}
+ 
+\input{components/acknowledgements}
+	
+\input{components/abstract}
+
+\tableofcontents
+  
+\mainmatter
+	
+	
+\input{chapters/chap1}
+\input{chapters/chap2}
+\input{chapters/chap3}
+\input{chapters/chap4}
+\input{chapters/chap5}
+\input{chapters/chap6}
+		
+		
+		
+		% ---------------------------------------------------------------------------
+		%
+		% Appendix
+		%
+		% ---------------------------------------------------------------------------
+		
+%		\part*{Appendix}
+%		\addcontentsline{toc}{part}{Appendix}
+		
+%		\appendix %---------------------------------------
+		
+%		\input{chapters/oneAppendix}
+		
+	
+
+
+  \clearemptydoublepage
+	\bibliography{bibliography/bibliography}
+	
+	%\listoffigures
+	%\listoftables 
+ 
+\end{document}
+

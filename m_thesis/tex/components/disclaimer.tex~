@@ -1,0 +1,14 @@
+\clearemptydoublepage
+
+
+\thispagestyle{empty}
+\selectlanguage{german}
+	\vspace*{0.8\textheight}
+	\noindent
+	I confirm that this \MakeLowercase{\doctype{}} is my own work and I have documented all sources and material used.
+	
+	\vspace{15mm}
+	\noindent
+	M{\"u}nchen, den 28. Juli 2014 \hspace{5cm} \author
+\selectlanguage{english}
+\newpage
