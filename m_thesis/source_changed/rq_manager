@@ -1,0 +1,39 @@
+// vi:ft=cpp
+/**
+ * \file
+ * \brief RQ object object functions.
+ */
+ 
+ #pragma once
+
+#include <l4/sys/icu>
+#include <l4/sys/rq_manager.h>
+#include <l4/sys/capability>
+
+namespace L4 {
+
+class RQ_manager : public Kobject_t<RQ_manager, Icu, L4_PROTO_RQ_MANAGER>
+{
+  L4_KOBJECT(RQ_manager)
+
+public:
+ 
+ // l4_msgtag_t info(l4_umword_t *cpu_max, l4_sched_cpu_set_t *cpus,
+ //                  l4_utcb_t *utcb = l4_utcb()) const throw()
+ // { return l4_readyqueue_info(cap()); }
+
+/**
+   * \copydoc l4_rqmanager_schedule_thread()
+   * \note \a rq_manager is the implicit \a this pointer.
+   */
+  l4_msgtag_t schedule_thread(Cap<Thread> const &thread,
+                         l4_sched_param_t const &sp,
+                         l4_utcb_t *utcb = l4_utcb()) const throw()
+  { return l4_rqmanager_schedule_thread_u(cap(), thread.cap(), &sp, utcb); }
+
+
+
+};
+
+}
+
