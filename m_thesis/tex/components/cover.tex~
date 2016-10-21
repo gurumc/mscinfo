@@ -22,6 +22,9 @@
 
  \vspace{4cm}
 
+  \IfFileExists{styles/tum.pdf}{%
+    		\includegraphics[height=20mm]{styles/tum.pdf}
+  	}%
 \begin{center}
 	       \oTUM{4cm}
 	   

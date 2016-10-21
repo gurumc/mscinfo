@@ -1,1 +1,25 @@
 \chapter{Related Work}
+This chapter explains the previous work and concepts which led to the development of synchronization component to the KIA4SM project. 
+It explains the synchronization algorithms available and makes a comparative study of these algorithms. 
+The comparative study is based on the research work of many papers which are referred here. An attempt is made to pick the best choice algorithm for the work. 
+
+\section{Synchronization of L4 fiasco tasks}
+
+The thesis is largely based on the work of Robert H{\"a}cker, who in his bachelor thesis \textit{ "Design of an OC-based Method for efficient Synchronization of L4 Fiasco.OC Mircrokernel Tasks"} \cite{haecker}, explains the design of a scheduler best suited scheduler for KIA4SM project and also gives comparison study of the different schedulers and synchronization methods suited for updating the task ready queue. 
+
+He suggests Modified-Maximum-Urgency-First algorithm as the best choice for KIA4SM project due to the importance of safety and security in embedded systems. After comparing the synchronization algorithms the sequential lock technique has been chosen for the better control it gives. He has suggested to verify the practical implication of Read-Copy Update(RCU). At the end he proposes a design for the existing system including aforementioned  scheduler(MMUF) and sequential locks. 
+
+This work is an extension of H{\"a}cker's findings. However, the focus of the thesis it to develop a good synchronization method, the implementation of the scheduler is not carried out. As go forward I make reference to Robert H{\"a}cker's work. 
+
+Some of the ideas and code knowledge is taken from the Valentin Hauner's bachelor's thesis \textit{"Extension of the Fiasco.OC microkernel with context-sensitive
+scheduling abilities for safety-critical applications in embedded systems"} \cite{hauner}. In this thesis he added EDF scheduling strategy. Though his thesis concentrated on using it in Genode and L4RE environment, it helped in understanding the scheduler.
+
+\section{Synchronization Methods}
+
+To do the justification to many synchronization methods are studied and are explained in this section. The synchronization categories are divided based on the methods they apply. 
+The figure %TODO insert the picture 
+shows the different types of synchronization methods along with examples. 
+
+\subsection{Lock-based algorithms}
+
+\subsection{Lock-Free algorithms}

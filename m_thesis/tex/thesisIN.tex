@@ -15,7 +15,10 @@
 %% Draft document mode
 %% Final document
 
-\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR12mm,DIV13]{scrbook}
+\documentclass[headsepline,footsepline,11pt,a4paper,bibtotoc,listof=totoc,footexclude,oneside,BCOR12mm,DIV13]{scrbook}
+
+%idxtotoc
+%\documentclass[headsepline,footsepline,footinclude=false,oneside,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc]{scrbook}
 
 \usepackage{graphicx}
 \usepackage{caption}
@@ -93,8 +96,8 @@
   \clearemptydoublepage
 	\bibliography{bibliography/bibliography}
 	
-	%\listoffigures
-	%\listoftables 
+	\listoffigures
+	\listoftables 
  
 \end{document}
 

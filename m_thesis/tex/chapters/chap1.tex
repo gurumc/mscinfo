@@ -9,9 +9,17 @@ The implemented high-level synchronization component in this master thesis is pa
 
 KIA4SM (stands for Cooperative Integration Architecture for Future Smart Mobility Solutions) is a research project at the department of operating systems. Traditionally Cooperative Intelligent Transport Systems have been built on heterogeneous systems. KIA4SM aims to provide an architecture of having an homogeneous platform for heterogeneous systems. 
 
-KIA4SM focuses on developing systems for the interaction and coordination between computer-assisted vehicles, be it partially or fully autonomously functioning actors.  KIA4SM aims to improve on the ad-hoc networking between vehicles
+KIA4SM focuses on developing systems for the interaction and coordination between
+computer-assisted vehicles, be it partially or fully autonomously functioning actors.  KIA4SM aims to improve on the ad-hoc networking between vehicles
 
-The final vision of the project is illustrate in (Fig). The goals of the project are,
+The final vision of the project is illustrate in figure \ref{kia4sm}. The goals of the project are,
+
+\begin{figure}[kia4sm]
+  \centering
+  \includegraphics[scale = 1]{figures/kia4sm_vision.png}
+  \caption{KIA4SM vision - homogeneous platform for heteroge-
+  neous devices}\label{kia4sm}
+\end{figure}
 
 \begin{itemize}
 \item A common platform as foundation for device in-
@@ -50,6 +58,13 @@ a ECU is malfunctioning. In this case it would be possible to swap the threads f
 malfunctioning one to working ones. So it is important to generate new ready-queues 
 based on the information we are receiving from the other ECUs in the grid, and then 
 exchange them with the actual ready-queue the scheduler uses.
+
+
+\begin{figure}[architecture]
+  \centering
+  \includegraphics[scale = 0.5]{figures/microkernel_architecture.png}
+  \caption{Organic Computing: Applying the Observer/Controller pattern to existing microkernel architecture}\label{architeture}
+\end{figure}
 
 \section{Thesis structure}
 The thesis is structured in a way that the reader understands the importance of the work carried out here and also the surrounding concepts before delving in to the specifics (inverted traingle). 
