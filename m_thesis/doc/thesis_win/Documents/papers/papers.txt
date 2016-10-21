@@ -1,0 +1,69 @@
+Orgranic computing:
+
+OC1: J. Branke, M. Mnif, C. Muller-Schloer, and H. Prothmann, “Organic
+Computing - Addressing Complexity by Controlled Self-Organization,”
+in Second International Symposium on Leveraging Applications of
+Formal Methods, Verification and Validation
+
+Oc2 - KIA4SM - Cooperative Integration Architecture for
+Future Smart Mobility Solutions 
+
+oc3 - Organic Computing – A New Vision for Distributed Embedded Systems
+Hartmut Schmeck
+Institute AIFB, University of Karlsruhe, Germany
+schmeck@aifb.uni-karlsruhe.de
+
+Scheduling:
+	sh1 - Scheduling and Synchronization for
+	Multi-core Real-time Systems - PhD Karthik S. Lakshmanan CMU
+
+sh2 - Priority Inheritance Protocols: An Approach to
+Real-Time Synchronization
+
+sh3 - Scheduling Real-Time Tasks in Distributed Systems:
+A Survey
+Alex Gantman Pei-Ning Guo James Lewis Fakhruddin Rashid
+
+sh4 - Pragmatic nonblocking synchronization for real-time systems
+Michael Hohmuth Hermann H¨artig
+
+EDF:
+Schedulability Analysis for Real-Time Systems
+with EDF Scheduling
+Fengxiang Zhang, Student Member, IEEE, and Alan Burns, Senior Member, IEEE
+
+sh5: Scheduling and Synchronization in Embedded Real-Time
+Operating Systems
+Sanjeev Khushu and Johnathan Simmons
+CSE 221, March 5, 2001
+
+sh6: Scheduling Algorithms for Multiprogramming
+in a Hard-Real-Time Environment
+C. L. Liu
+Project MAC, Massachusetts Institute of Technology
+
+RCU
+Extending RCU for Realtime and Embedded Workloads
+Paul E McKenney
+IBM Linux Technology Center
+paulmck@us.ibm.com
+
+Read-­-Copy Update and Its Use in Linux Kernel
+
+What Is RCU?
+Distributed OS Lecture, TU Dresden
+
+Read-Copy Update:
+Using Execution History to Solve Concurrency Problems
+
+IBM: Making RCU Safe For Battery-Powered
+Devices
+
+Exploiting Deferred Destruction:
+An Analysis of
+Read-Copy-Update Techniques
+in Operating System Kernels
+
+Making RCU Safe for Deep Sub-Millisecond Response Realtime
+Applications
+

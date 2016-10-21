@@ -1,0 +1,5 @@
+Design and Prototypical Implementation of a High-Level Synchronization Component for Dynamic Updates of Task Run Queues in Genode/Fiasco.OC
+
+Entwurf und Prototypische Implementierung einer High-Level Synchronisationskomponente fuer dynamische Updates von Task-Warteschlangen in Genode/Fiasco.OC
+
+Design and Prototypical Implementation of a High-Level Synchronization Component for Dynamic Updates of Task Run Queues in Genode/Fiasco.OC
