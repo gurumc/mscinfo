@@ -1,0 +1,106 @@
+\chapter{Design}\label{design}
+
+This chapter gives a high-level overview of the  design of \texttt{Observer-Controller} architecture used in the KIA4SM project. It also describes the design details of  the \texttt{Synchronization} module and the communication architecture between the \texttt{Synchronization} module and \texttt{Controller} module.
+
+\section{Overview}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale = 0.7]{figures/oc.png}
+  \caption{The Observer- Controller architecture}\label{oc}
+\end{figure}
+
+The figure \ref{oc} shows the \texttt{Observer-Controller} architecture. Its goal is to have a system that can automatically take the decisions of scheduling tasks/threads by observing the system. There are three main modules involved, namely, \texttt{Observer}, \texttt{Controller} and \texttt{Synchronization}. All these modules are implemented as Genode OS applications (or components).
+
+The \texttt{Observer}'s (also called Monitor/Monitoring agent) job is to collect all the information from the system, analyse it and send it to the \texttt{Controller}. The \texttt{Observer} collects the information by using the \texttt{Trace} facility available in Genode. The data collected from the \texttt{Observer} includes \textit{number of tasks}, \textit{process ID}, \textit{execution time of each task}, \textit{RAM info}, \textit{CPU quota}, etc.
+
+The \texttt{Controller} is responsible for maintaining the system in a safe and optimized state. It analyses the data collected from the \texttt{Observer} and takes a decision for system reconfiguration\cite{kia4sm}. The system reconfiguration involves updating a single thread to the ready queue or generating a new ready queue. It then communicates the system reconfiguration data to the \texttt{Synchronization} module. The \texttt{Controller} also applies load balancing or energy saving techniques to keep the system in an optimized state.
+
+The design of \texttt{Synchronization} component is quite complicated. The initial design consisted of having a high-level component, which can directly access the kernel ready queue and exchange with the ready queue given by the \texttt{Controller}. This requires synchronized access to the kernel ready queue. However, further research showed that this is not possible due to the following reasons:  
+
+\begin{itemize}
+\item Kernel ready queue cannot be directly accessed from a high-level component such as the one proposed due to the kernel protection domain.
+
+\item The \texttt{Controller} cannot create the ready queue that can be directly used by the kernel. This is because the
+thread ids represented in Genode OS framework differs from the thread ids in the kernel. Moreover, the ready queue list in the kernel has scheduler context objects in it (explained in \ref{Foundations:rq} and \ref{Foundations:sc}). So a user-level component such as \texttt{Controller} cannot access scheduler context objects.
+
+\item The list type for ready queue is implemented in a template class called \texttt{Dlist}, which is accessible only from kernel and needs a re-implementation in the user-level component.
+
+\end{itemize}
+
+The above mentioned reasons forced a change in design, which is shown in figure %TODO,
+The Synchronization module was split into two major parts. The first part is implemented as a high-level Genode component which is responsible for communicating with the \texttt{Controller} and passing the data to the second part. The \texttt{Controller} and the \texttt{Synchronization} module interaction is that of a producer-consumer relationship. The producer (\texttt{Controller}) produces a thread (or ready queue) and consumer (\texttt{Synchronization} module) consumes the thread by updating it to the kernel ready queue. This needs a synchronization mechanism to be implemented between these two components, which is explained in subsection \ref{rqmodule}.
+
+The second part of the \texttt{Synchronization} module is responsible for taking the thread data from the user-level component and updating the threads to the ready queue. It is implemented in the Genode operating system, with most of the work done in L4/Fiasco.OC microkernel. It has to ensure that the access to the ready queue is synchronized. It should also makes sure that the updated threads execute and the system is in safe state.
+
+The design has been broken down into submodules and are shown in figure \ref{fig:Design_25}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\linewidth]{figures/Design_25.png}
+\caption{The data flow between Synch component, Rq manager and Controller}
+\label{fig:Design_25}
+\end{figure}
+
+The \texttt{Rq\_manager} is a Genode component and it's responsible for providing the communication interface between \texttt{Controller} and \texttt{Synchronization} component.  The main aim is to have a fast communication between the components, in order to reduce latency. The best choice for providing a communication interface in Genode is creating shared dataspace as explained in section \ref{Foundations:icc}. The \texttt{Rq\_manager} acts as a server in Genode by providing its services to the clients. This is the first component created and in the execution sequence and it provides RPC interface to its clients. This component is only required to provide the initial communication interface and dataspace management and the clients which accesses the server's services will directly communicate once they obtain the shared dataspace. 
+
+The \texttt{Controller} and he \texttt{Synch\_client} are Genode components and  act as clients to the \texttt{Rq\_manager}. The \texttt{Controller} uses the Genode RPC calls to obtain the dataspace capability from \texttt{Rq\_manager}. Once it has the access, it updates the dataspace with thread information. This information contains the thread ids as represented in the Genode OS framework, processor id on to which the thread to be scheduled and priorities of the threads. However, the \texttt{Controller} doesn't enforce any policies to the \texttt{Synch\_client}. So both these components work independently from each other but it is synchronized via dataspace.
+
+The \texttt{Synch\_client} also uses the Genode RPC calls to obtain the dataspace capability from \texttt{Rq\_manager}. Once it obtains the access to shared dataspace, it checks for the thread information and transfers the thread ids, priorities, CPU information to the kernel. The communication between Genode and Fiasco.OC kernel is governed by L4 API calls. However, the \texttt{Synch\_client} being a high-level Genode component, it cannot make use of L4 API calls by itself. In order to communicate with the kernel, the \texttt{Synch\_client} makes use of Genode OS framework's service. It first creates Genode's RPC object, then using this it makes a call to the API of Genode's RPC object. The Genode's RPC object makes an API call to L4 layer. The L4 API communicates the information to Fiasco.OC kernel object by using IPC service provided by the kernel. The kernel is responsible for identifying the kernel threads and updating them to the ready queue.
+
+The following sections give detailed design of the individual modules.
+
+\section{Rq\_manager module}\label{rqmodule}
+The communication part of the work was collaborated with Paul Nieleck, who worked on the \texttt{Controller} part of the \texttt{Observer-Controller} architecture\cite{paul}. As Nieleck designed and implemented this module, only the details that help to understand the \texttt{Synchronization} component are described below. 
+
+The \texttt{Rq\_manager} has two main functionalities. First, creating a shared dataspace using Genode's APIs and providing a mechanism to access and modify the shared dataspaces to its clients. The \texttt{Rq\_manager} acts as a server in Genode's client-server relationship. It interacts with the Core's RAM service and obtains a RAM dataspace. The Core’s RAM service returns a dataspace capability after allocating memory. Then, the \texttt{Rq\_manager} attaches the dataspace to its RM session and whenever a client requests this dataspace capability, the server delegates it. Once the clients obtain the dataspace capability, they can attach it to their own RM session and access the contents inside the dataspace. Now, both the server and clients have access to shared memory via their respective virtual addresses.
+
+\section{Synch\_client module}
+The \texttt{Synch\_client} module is a Genode component that is responsible for updating the threads to the ready queue. It communicates with the \texttt{Controller} using a shared dataspace created by the \texttt{Rq\_manager}. This acts as a client to the \texttt{Rq\_manager} and obtains the dataspace capability from the \texttt{Rq\_manager} via an RPC call. It does so by creating a Connection object provided by the \texttt{Rq\_manager}. This is also responsible for transferring the thread update information to the kernel.
+
+Once the dataspace is accessible, the \texttt{Synch\_clinet} runs in an infinite loop to continuously check the dataspace for any thread that needs to be scheduled. Once it finds such a thread, it updates the thread to the ready queue and then, informs the \texttt{Controller} about the scheduling by updating the shared dataspace. This way, the \texttt{Controller} knows whether the thread scheduling was successful.
+
+Furthermore, the \texttt{Synch\_client} communicates with the kernel. However, this is done by using the Genode's Trace service. It creates a Connection object provided from the Genode's Trace service to make an RPC call to the Trace object. It makes RPC call with the thread information and waits for the call to return. The return value indicates the success/failure about updating the threads to the kernel ready queue. It updates the same information to shared dataspace. The \texttt{Controller} takes a decision on the updated information from the \texttt{Synch\_client}.
+
+\section{Ready queue update Mechanism} \label{design:rqupdate}
+ 
+ Ready queue update mechanism is the process of reading the ready to execute threads and making sure that they are updated in the respective ready queues of the processors. Figure (class diagram, which involves, Synch\_client to scheduler class ) %TODO
+shows the high level overview of the involved classes in this process.
+A Genode module provides an API, which can be called from the \texttt{Synch\_clinet}. The L4 module provides API calls, which can be called from Genode. The Fiasco.OC kernel module accesses the incoming threads and updates them to the ready queue.
+
+The following subsections give an overview of the modules shown in figure (class diagram)%TODO
+
+\subsection{Genode module}
+Genode module is a component which provides an API that can be called from the \texttt{Synch\_client}. The  \texttt{Synch\_client} communicates with L4/Fiasco.OC kernel by using this module. Since L4 calls cannot be made directly from the application, a Genode helper component is necessary to make these calls. The Genode API acts as a wrapper to the L4 calls. It takes the information from the \texttt{Synch\_client} and copies it to the data structure used by the kernel and calls L4 API. The call to L4 is a blocking one. It waits for the L4 call to return and checks for the success or failure. Based on the return value of the L4 API, this returns 1(ready queue update successful) or 0(ready queue update failure) to the \texttt{Synch\_client}.
+
+\subsection{L4 module}
+
+L4 module represents the L4 API layer, which governs the communication between Genode and Fiasco.OC. Genode API makes a call to L4 using an API provided by L4 module. L4 module is responsible for obtaining the thread ids from Genode and pass them to the Fiasco.OC module using an L4 IPC call. The L4 provides many facilities to the kernel, such as utilities for different platforms, GCC  libraries, L4 system calls(L4sys). This L4 API written is in L4sys code. Once the thread ids are obtained from the Genode API, it extracts and fills them in kernel's UTCB(used for transferring function call parameters) to make the IPC call.
+
+Additionally, the L4 module is also responsible for converting the thread ids to kernel understandable flex pages (explained in \ref{imp:l4api}). Once the IPC call returns, this module returns the same value back to the Genode module. 
+
+\subsection{Fiasco.OC Kernel module}
+
+Fiasco.OC kernel module responsible for receiving the threads from the L4 API and safely updating them to the ready queue list of the scheduler. The figure %TODO
+shows the involved classes, data and control flow between the classes.
+
+There were two design choices available to receive the incoming threads from L4 API. The first one was to use an existing kernel object (scheduler) and the second was to create a new kernel object (see \ref{implement:kernelobject}). The second method ensures that the legacy code is clean and provides a dedicated object. However, it uses extra memory and adds the complexity of maintaining one more kernel object. So, the idea of using the scheduler object was used in designing this module. 
+
+The scheduler kernel object is used to get the thread data from the L4 API. The obtained thread information is in the form of L4 flex pages. These pages are converted to get the thread ids. The thread ids can be used to obtain the scheduler context objects. A list is created similar to the ready queue list using the scheduler context objects. This module then makes a decision about when the ready queue should be updated according to the current state of the system. After the decision, it calls the methods in the ready queue class to update/exchange the list.
+
+The call is then transferred to Sched\_context\_Fp\_EDF class. The type of the ready queue is selected depending on the type of the scheduler in use. If it's Fixed priority scheduler, an exchange call is made to FP ready queue class. 
+
+The FP exchange call receives the new ready queue list and the priority. A call is made to the list data type to switch the ready queue. A boolean value is returned to the scheduler to indicate the success.
+
+Additionally, this module has to provide a synchronized access to the ready queue. The synchronization method used is explained in \ref{imp:sync}. 
+
+\subsection{Finding the right time for RQ update}
+Finding the right point for synchronization is a big challenge. Since this toolchain is used on a safety critical system, care should be taken to ensure that the system remains in a safe and predictable state. Theoretically, the points for safe update of the ready queue are:
+
+\begin{itemize}
+\item Empty Run Queue: If the run queue is empty, exchanging the list is easy since no threads exist in the ready queue. In case there is a single thread in the queue, the thread must be an idle thread. So, in the idle thread and empty queue cases,it is safe to exchange the entire ready queue list with a new list. A CPU lock is used to disable the thread preemption and the ready queue list is exchanged.
+
+\item Static point in time: In this method, the \texttt{Controller} decides which thread should be allowed to complete its execution before exchanging the ready queue list. 
+
+\item Variable point in time: 
+\end{itemize}

@@ -1,0 +1,73 @@
+\RequirePackage[l2tabu,orthodox]{nag}
+
+% TODO: decide if one-sided/two-sided
+%\documentclass[headsepline,footsepline,footinclude=false,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,BCOR=12mm,DIV=12]{scrbook} % two-sided
+\documentclass[headsepline,footsepline,footinclude=false,oneside,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc]{scrbook} % one-sided
+
+% TODO: change citation style in settings
+\input{settings}
+
+% TODO: change thesis information
+\newcommand*{\getUniversity}{Technische Universität München}
+\newcommand*{\getFaculty}{Department of Informatics}
+\newcommand*{\getTitle}{Design and Prototypical Implementation of a High-Level Synchronization Component for Dynamic Updates of Task Run Queues in L4 Fiasco.OC/Genode}
+\newcommand*{\getTitleGer}{Entwurf und Prototypische Implementierung einer High-Level Synchronisationskomponente fuer dynamische Updates von Task-Warteschlangen in L4 Fiasco.OC/Genode}
+\newcommand*{\getAuthor}{Gurusiddesha Chandrasekhara}
+\newcommand*{\getDoctype}{Master's Thesis in Informatics}
+\newcommand*{\getSupervisor}{Prof. Dr. Uwe Baumgarten}
+\newcommand*{\getAdvisor}{Daniel Krefft,M.Sc.; Sebastian Eckl,M.Sc.}
+\newcommand*{\getSubmissionDate}{November 15, 2016}
+\newcommand*{\getSubmissionLocation}{Munich}
+
+\begin{document}
+
+% Set page numbering to avoid "destination with the same identifier has been already used" warning for cover page.
+% (see https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Problems_with_Links_and_Pages).
+\pagenumbering{alph}
+\input{pages/cover}
+%\afterpage{\blankpage}
+
+\frontmatter{}
+\input{pages/title}
+%\afterpage{\blankpage}
+
+%\frontmatter{}
+%\afterpage{\blankpage}
+\input{pages/disclaimer}
+%\afterpage{\blankpage}
+
+\input{pages/acknowledgements}
+
+\input{pages/abstract}
+
+\microtypesetup{protrusion=false}
+\tableofcontents{}
+\microtypesetup{protrusion=true}
+
+\newpage
+\addcontentsline{toc}{chapter}{Acronyms}
+\input{chapters/acronyms.tex}
+
+\mainmatter{}
+
+\input{chapters/01_introduction}
+\input{chapters/02_RelatedWork}
+\input{chapters/03_Foundations}
+\input{chapters/04_Design}
+\input{chapters/042_Implementation}
+\input{chapters/05_Testing}
+\input{chapters/06_Conclusion}
+% TODO: add more chapters here
+
+\appendix{}
+
+\microtypesetup{protrusion=false}
+\listoffigures{}
+\listoftables{}
+
+\microtypesetup{protrusion=true}
+
+
+\printbibliography{}
+
+\end{document}
