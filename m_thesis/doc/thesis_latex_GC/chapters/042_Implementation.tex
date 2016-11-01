@@ -1,8 +1,15 @@
 \chapter{Implementation}
 
-This chapter gives the detailed implementation details for the toolchain presented in chapter \ref{design}. Code blocks are used at necessary places to give extensive details. The code written as part of the thesis can be accessed in the Github repository \cite{git_synccode}.
+This chapter gives the implementation details for the design presented in Chapter \ref{design}. Code blocks are used at necessary places to give extensive details. The code written as part of the thesis can be accessed in the Github repository \cite{git_synccode}.
 
-The implementation is done in C++ language to be compatible with Genode operating system and Fiasco.OC which are developed in C++. The following sections describes the module implementation and the last section explains about creating a new Fisaco.OC kernel object. 
+This implementation used Genode OS framework 15.11 and Fiasco.OC version %TODO
+The implementation was done in C++ to be compatible with Genode operating system and Fiasco.OC which are both developed in C++. The following sections describe the module implementation.
+
+The first aim was to find access to the ready queue of the scheduler from Genode. The task was to find a L4 API, which has access to the ready queue, unfortunately there existed none. According to the l4-hackers on Fiasco's API level there is no interface to directly access the run queues of processors. The current interface allows to place a thread on a CPU (plus scheduling parameters) and thus add it to one CPU and remove it from another (or initially launch a thread). CPU selection is done using the supplied CPU mask \cite{l4hack}. This forced to come up with a new API that gives access to read/write ready queue to Genode or an high-level application.
+
+The new API should be able to access the ready queue directly. However, this was also not possible due to the way that the ready queue is implemented. The ready queue list is a priviate list inside the ready queue class and there exists a ready queue for each type of scheduler and there are three types of schedulers that can be used in Fiasco.OC namely FP, WFQ and EDF. Morever each processor has its own ready queue which is maintained in Per-CPU variable to synchronize between multiple processor. Inorder to access the ready queue, methods should be provided from ready queue class till Genode applications. So instead of taking the ready queue list all the way upto the Genode/high-level application, the thread to be updated is propagated via series of calls to the ready queue class.
+
+The sequence diagram \ref{fig:sequence_classUpdate} shows the order of the calls taking place from the Genode component synch\_cient to the kernel. At first, the \texttt{Rq\_manager} module is explained which provides the communication mechanism. Then the implementaion of Synch\_client is described.
 
 \begin{figure}[h]
 \centering
@@ -11,12 +18,15 @@ The implementation is done in C++ language to be compatible with Genode operatin
 \label{fig:sequence_classUpdate}
 \end{figure}
 
+%TODO explain the sequence diaram here
+%TODO Add articles
+%TODo remove commas from figure
 
 \section{Rq\_manager module}
 
-The sequence diagram \ref{fig:sequence_classUpdate}, shows the order of the calls taking place from the Genode component synch\_cient to the kernel. The class Rq\_manager is the driver class of this component. It creates and maintains multiple ready queues at the at the user-level component, where each queue is of type Rq\_buffer. The Rq\_buffer is a template class, which implements a circular array by using Genode dataspace, each entry in the circular array is of type Rq\_task struct, which represents a Genode thread.
+ The class \texttt{Rq\_manager} is the driver class of this component. It creates and maintains multiple ready queues at the user-level component, where each queue is of type Rq\_buffer. The Rq\_buffer is a template class, which implements a circular array by using the Genode dataspace. Each entry in the Genode dataspace is a circular array of type Rq\_task struct, which represents a Genode thread.
 
-The code listing \ref{rqmanager} shows the implementation of Rq\_manager class. The constructor of Rq\_manager class first gets the number of available cores from Monitoring agent, then the \texttt{\_init\_rq()} function initializes the ready queues by using \texttt{init\_w\_shared\_ds} method from the Rq\_buffer class. The Rq\_manager provides enqueue and dequeue operations for the manipulation of ready queue.
+The code listing \ref{rqmanager} shows the implementation of \texttt{Rq\_manager} class. The constructor of \texttt{Rq\_manager} class first gets the number of available cores from Monitoring agent, then the \texttt{\_init\_rq()} function initializes the ready queues by using \texttt{init\_w\_shared\_ds} method from the Rq\_buffer class. The \texttt{Rq\_manager} provides enqueue and dequeue operations for the manipulation of ready queue.
 
 \begin{lstlisting}[caption={Rq\_manager class},label={rqmanager}, style=customcpp]
 class Rq_manager
@@ -60,11 +70,11 @@ class Rq_manager
 }
 \end{lstlisting}
 
-The \_buffer is a template class which represents the ready queue in the application side. It implements a circular array with fixed size. It uses \texttt{head} pointer, which points to the beginning of the array and \texttt{tail} pointer, which points to the end of the array. The elements are always inserted at tail pointer and removed from head. The pointers are wrapped around, whenever they reach the end of the array. The free space available between head and tail is represented by using a pointer called \texttt{window}. 
+The Rq\_buffer is a template class, which represents the ready queue in the application side. It implements a circular array with fixed size. It uses \texttt{head} pointer, which points to the beginning of the array and \texttt{tail} pointer, which points to the end of the array. The elements are always inserted at tail pointer and removed from head. The pointers are wrapped around, whenever they reach the end of the array. The free space available between head and tail is represented by using a pointer called \texttt{window}. 
 
-Rq\_buffer has enqueue and dequeue functionalities which can be called from Rq\_manager to insert or remove an element from ready queue. It also provides a functionality to initialize and create a shared data space. The code listing \ref{rqbuffer} shows, memory allocation for the shared dataspace and attaching it to the RM session of the component.
+Rq\_buffer has enqueue and dequeue functionalities which can be called from \texttt{Rq\_manager} to insert or remove an element from ready queue. It also provides a functionality to initialize and create a shared dataspace. The code listing \ref{rqbuffer} shows, memory allocation for the shared dataspace and attaching it to the RM session of the component.
 
-\begin{lstlisting}[caption={Allocating data space},label={rqbuffer}, style=customcpp]
+\begin{lstlisting}[caption={Allocating dataspace},label={rqbuffer}, style=customcpp]
 
 	Genode::Dataspace_capability _ds; /* dataspace capability of the shared object */
 	char *_ds_begin = nullptr;        /* pointer to the beginning of the shared dataspace */
@@ -93,13 +103,13 @@ The code listing \ref{rqtask} shows the Rq\_task structure which represents an e
  	};
 \end{lstlisting}
 
-The access to this shared data space must be synchronized since both \texttt{Controller} and \texttt{Synch\_client} use  it. This is done by locks provided from Genode.
+The access to this shared dataspace must be synchronized since both the \texttt{Controller} and the \texttt{Synch\_client} use  it. This is done by locks provided from Genode.
 
 \section{Synch\_client module}
-The \texttt{Synch\_client} class represents a Genode component which controls the process of scheduler ready queue update. It acts as a client in Genode by using the services of \texttt{Rq\_manager} and accesses the shared data space. The \texttt{Controller} and \texttt{Synch\_client} interaction is that of a producer-consumer relationship. The producer (\texttt{Controller}) decides and produces(puts it in a buffer) a thread that needs to be executed and consumer(\texttt{Synch\_client}) picks the threads to the kernel ready queue.
+The \texttt{Synch\_client} class represents a Genode component which controls the process of scheduler ready queue update. It acts as a client in Genode by using the services of the \texttt{Rq\_manager} and accesses the shared dataspace. The \texttt{Controller} and the \texttt{Synch\_client} interaction is that of a producer-consumer relationship. The producer (\texttt{Controller}) decides and produces(puts it in a buffer) a thread that needs to be executed and consumer(\texttt{Synch\_client}) picks the threads to the kernel ready queue.
 
 %TODO insert flowchart
-The initial communication with \texttt{Rq\_manager} is governed by RPC call. In order to make an RPC call, it creates a Connection object. As explained before there are a number of pointers used for manipulating the circular buffer. The different pointers used are:
+The initial communication with the \texttt{Rq\_manager} is governed by RPC call. In order to make an RPC call, it creates a Connection object. As explained before there are a number of pointers used for manipulating the circular buffer. The different pointers used are:
 
 \begin{labeling}{pointers}
 	\item [\_rqbufp] Hold the pointer to the Rq\_buffer type
@@ -125,7 +135,7 @@ There can be more than one ready queue. So, we need multiple pointers of each ty
 	std::vector<Rq_manager::Rq_task*> buf;
 \end{lstlisting}
 
-We can use the Connection object created to make RPC calls to Rq\_manager. The first RPC call is to obtain the number of ready queues available. For each ready queue available, it has to make an RPC call to get the data space capability and attach to the local RM session and initialize all the pointers shown in the listing \ref{synchdata}. 
+We can use the Connection object created to make RPC calls to the\texttt{Rq\_manager}. The first RPC call is to obtain the number of ready queues available. For each ready queue available, it has to make an RPC call to get the dataspace capability and attach to the local RM session and initialize all the pointers shown in the listing \ref{synchdata}. 
 
 After everything has been initialized the \texttt{Synch\_client} runs in an infinite loop. For each ready queue it tries to obtain the lock, if the locking is successful then it schedules the threads available in the ready queue. The infinite loop has two goals. First, it has to ensure that it moves on to the next ready queue so that the threads in other queues also gets scheduled. Second, is to reduce the amount of time spent in the critical section as little as possible. In order to achieve the above mentioned goals, the ids of the threads/tasks are copied to a local buffer, head and tail pointers updated and the lock is released. By this way the scheduling of threads by calling of Genode API is kept outside the critical section.
 
@@ -137,7 +147,7 @@ The ready queue update mechanism follows the series of calls which are shown in 
 
 \subsection{Genode code changes}
 
-Genode should provide a way to the application for calling the L4 API calls. In the present Genode code the L4 APIs calls for scheduling threads are done from \texttt{Platform\_thread.cpp}, where the thread gets created. But the \texttt{Platform\_thread} is not accessible from the application, as it doesn't provide any RPC interface for applications to make use of its services. The only way that the components communicate in Genode is by using RPC calls. So an RPC call needs to be provided for the components to use it. As of now this call is kept in \texttt{Trace} service. The trace service is being used by the monitoring agent already to obtain the data from the Genode. The Trace service has been extended to provide an API, which can be used to from \texttt{Synch\_client} component.
+Genode should provide a way to the application for calling the L4 API calls. In the present Genode code the L4 APIs calls for scheduling threads are done from \texttt{Platform\_thread.cpp}, where the thread gets created. But the \texttt{Platform\_thread} is not accessible from the application, as it doesn't provide any RPC interface for applications to make use of its services. The only way that the components communicate in Genode is by using RPC calls. So an RPC call needs to be provided for the components to use it. As of now this call is kept in \texttt{Trace} service. The trace service is being used by the monitoring agent already to obtain the data from the Genode. The Trace service has been extended to provide an API, which can be used to from the \texttt{Synch\_client} component.
 
 The \texttt{base/src/trace/trace\_session\_component.cc} contain the API definition, in which it takes a structure argument of threads and calls the L4 scheduler call.
 
