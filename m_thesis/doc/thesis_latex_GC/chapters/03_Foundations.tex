@@ -1,15 +1,12 @@
 \chapter{ Foundations} \label{foundations}
-Genode operating system framework and L4/Fiasco is used as the preferred kernel in this project.
-Since the kernel itself acts a type-I Hypervisor which allows for partitioning of different
-software components via separated container, making them work on user mode level \cite{kia4sm}.
+Genode operating system framework and L4/Fiasco is used as the preferred kernel in this project. Since the kernel itself acts a type-I Hypervisor which allows for partitioning of different software components via separated container, making them work on user mode level \cite{kia4sm}.
 
-To understand the design and implementation of this project, the reader has to be aware of few important concepts in both Genode operating system and L4 Fiasco.OC kernel. Many concepts here are the relevant parts explained from the Genode book \cite{genodebook}
-according to author's understanding, but the reader can always refer to the book for detailed explanation.
+To understand the design and implementation of this project, the reader has to be aware of few important concepts in both Genode operating system and L4 Fiasco.OC kernel. Many concepts here are the relevant parts explained from the Genode book \cite{genodebook} according to author's understanding, but the reader can always refer to the book for detailed explanation.
 
 \section{Genode Operating System Framework} \label{foundations_genode}
 Genode operating system  framework is a tool kit for building secure, special purpose operating systems. Genode is maintained by German company Genode Labs GMBH, which  offers both commercial licenses  and open-source license under GPLv2. The operating system can be used as an embedded operating system or a fully sophisticated general purpose operating system. 
 
-Genode operating system uses a recursive tree structure, where each node in the tree represents a component. Each node is owned by its parent and it controls every aspect of its child like resource control, execution environment etc. The root of the tree is a minimalistic micro-kernel, which is responsible for providing protection domain, threads of execution and communication mechanism between the protection domains. The rest of the operating system's features such as, device drivers, network stacks, file systems, virtual machines are the nodes of the operating systems. Each component gets a share of the physical resources available. The components can grant the resources to its children. If the components wants additional resources it can request its parent, where the parent can grant or deny it.
+Genode operating system uses a recursive tree structure, where each node in the tree represents a component. Each node is owned by its parent and it controls every aspect of its child like resource control, execution environment etc. The root of the tree is a minimalistic microkernel, which is responsible for providing protection domain, threads of execution and communication mechanism between the protection domains. The rest of the operating system's features such as, device drivers, network stacks, file systems, virtual machines are the nodes of the operating systems. Each component gets a share of the physical resources available. The components can grant the resources to its children. If the components wants additional resources it can request its parent, where the parent can grant or deny it.
 
 This makes Genode operating system to have less trusted computing base(TCB) and gives better security features. If a parent thinks that a child is compromised, it can destroy the child while keeping the rest of the system safe. Genode operating system has been developed to strike a balance between various aspects of operating systems. For example, OS has to provide an assurance that threads get fair share of execution time while accommodating rich and dynamic workloads and similarly for security features and user friendliness.
 
@@ -23,19 +20,17 @@ Inside the \texttt{repos/} folder \texttt{base/} repository contains the basic f
 \subsection{Capabilities, RPC Objects, Protection Domain}\label{Foundations:cap}
 Genode consists of many components and each component lives in a \texttt{protection domain}, which provides an isolated execution environment. The resource is abstracted to an \texttt{RPC object} and a token which gives access to this RPC object is called \texttt{capability}.
 
-When RPC object is created, Genode creates a so called \texttt{object-identity} which represents the RPC object in kernel space. The kernel maintains a capability space, which holds reference for the object identities. This capability space is explained in detail in 
-%TODO 
+When RPC object is created, Genode creates a so called \texttt{object-identity} which represents the RPC object in kernel space. The kernel maintains a capability space, which holds reference for the object identities. This capability space is explained in detail in \ref{founcations:overfiasco}
 The capabilities can be passed to different components, this operation of transferring capability from one protection domain to another is called  \texttt{delegation}
 
 \subsection{Client-Server Relationship}
 Capabilities are used to call methods of RPC objects which are from different protection domains. The component that uses the RPC object is called client and the owner of the RPC object plays the role of the server. The server should at-least have one thread called \texttt{entrypoint}, which gets activated whenever when the client calls the method.
 
-Clients generally have to trust the server since they are granted from the parent through session invocation. %TODO write about the session invocation
-Servers do not trust their clients. 
+Clients generally have to trust the server since they are granted from the parent through session invocation. Servers do not trust their clients and cancel the service anytime if it detects a security threat.
 
  
 \subsection{Component Creation}
-Genode component is made up of five basic ingredients, 
+Genode component is made up of five basic parts, 
 
 \begin{labeling}{component}
 \item[RAM session] Allocates memory for program's BSS and heap
@@ -65,13 +60,15 @@ The steps taken in allocating and using shared dataspace are,
 
 All of these methods are rarely used in isolation and most of the communication methods are used in combination of these methods. In this particular work RPC and shared memory are used in combination.
 
-\subsection{Scheduling}
-Scheduler maintains a list of so called scheduling contexts and each of these refers to a thread. Each time the kernel is entered, the scheduler is updated with the passed duration. When updated, it takes a scheduling decision by making the next to-be-executed thread the head of the list. At kernel exit, the control is passed to the user-level thread that corresponds to the head of the scheduler list.
+\subsection{Interaction with Kernel}
+The interaction of user-level threads with the kernel can be seen as a state machine with state transitions. The user-level threads in Genode enter the kernel via a system call, either by device interrupts or by a CPU exception. Once entered, the kernel takes the corresponding action for the event that caused the kernel entry, and the thread leaves the kernel to the user land.
+
+One such kernel interaction is scheduling a thread. Scheduler maintains a list of so called scheduling contexts and each of these refers to a thread. Each time the kernel is entered, the scheduler is updated with the passed duration. When updated, it takes a scheduling decision by making the next to-be-executed thread the head of the list. At kernel exit, the control is passed to the user-level thread that corresponds to the head of the scheduler list.
 
 \subsection{Trace Service}
 Genode has a Trace service, which can be used by the user level components for light weight event-tracing. This can be used for obtaining the thread related information for all the threads available in the system. This service is used in the testing of the thread update mechanism which will be explained later in chapter \ref{chap:testing}.
 
-\section{Overview of L4/Fiacso.OC}
+\section{Overview of L4/Fiacso.OC} \label{founcations:overfiasco}
 Fiasco.OC is a 3rd generation capability-based microkernel which belongs to L4 family of microkernel. Fiasco provides multi processor support and hardware assisted virtualization and paravirtualization. It is capable of real-time scheduling and is scalable from embedded to HPC systems \cite{foc_feat}. These features made Fiasco.OC has the ideal choice for using in this project. Fiasco.OC can used with L4 Runtime Environment (L4Re), which provides necessary support to develop applications or with an operating system such as Genode.
 
 The OC in Fiasco.OC stands for Object capability system. In this kernel everything is represented as an object and they interact with each other with kernel provided IPC mechanism. Since the system is built around objects, where each object provides a service which other objects can use. The capabilities in Fiasco.OC represents references to the kernel objects and are stored in a per task capability mapping tables which increases the security of the kernel. The figure \ref{fig:foc_cap} \cite{foc_pdf}, shows the per task capability table. Kernel provides a factory for object management.
@@ -162,13 +159,21 @@ Note to be taken in Fiasco.OC kernel the thread that is on the CPU will not be i
 
 In Fiasco.OC \texttt{prio\_next[256]} represents the ready queue list and uses a variable called \texttt{prio\_highest} to determine the highest priority available.  
 
-\subsection{Enqueue and Dequeue operation}	
+\subsection{Enqueue and Dequeue Operation}	
 Modification of ready queue operation is a critical section. The uniprocessor implementation uses a simple CPU lock to disable the interrupts and SMP processors uses CPU specific ready queue operation. In order to use per CPU ready queue list, the kernel has to ensure the preemption is disabled. Enqueue operation takes a scheduler context object to be enqueued and checks if it's already in the list. This is checked against the corresponding priority list. If the thread is not in the ready queue list, it is enqueued and prio\_highest variable is set accordingly. 
 
 The dequeue operation is similar to enqueue, after disabling the CPU preemption, it deletes if the thread exists in the list. Once the operation is completed the CPU preemption is enabled.
 
-\section{Thread Creation calls in Genode and Fiasco.OC}
-Thread creation Genode application is done by creating a class and inhering the Genode \texttt{Thread} class. This class takes stack size as template parameter. The diagram %TODO insert diagram
+\section{Thread Creation calls in Genode and Fiasco.OC}\label{foundations:thread_creation}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{figures/Thread_creation}
+\caption{Thread creation calls in Genode operating system}
+\label{fig:Thread_creation}
+\end{figure}
+
+Thread creation Genode application is done by creating a class and inhering the Genode \texttt{Thread} class. This class takes stack size as template parameter. The diagram \ref{fig:Thread_creation}
 shows the sequence of calls taken from application to all the way down the kernel level.  
 The derived class needs to have a constructor and an entry function. The entry function implements the work done by the thread. When the thread objects are created and the start method of the Genode Thread class is called, the entry method starts executing. The code listing \ref{threadcreate} shows the inhering the Thread class to create user threads.
 
@@ -200,3 +205,58 @@ Once the Genode application creates the thread the sequence of calls take place.
 
 \item The sys\_run call identifies the thread and scheduling parameters associated with it. The scheduler\_context object is created with the defined scheduling strategy(FP or EDF). The thread is then migrated to the corresponding CPU and added to the ready queue.  
 \end{enumerate}
+
+\section{Creating a Kernel Object in Fiasco.OC}\label{implement:kernelobject}
+In this section creating a new kernel object is explained, that can be utilized to make a dedicated work in the kernel. The following changes are required to create kernel object and compile it. A new class should be created, which inherits \texttt{Icu\_h<object name>} and
+\texttt{Irq\_chip\_soft} classes. The class has to declare this as kernel object using a macro (FIASCO\_DECLARE\_KOBJ()) provided from Fiasco.OC and the memory is allocated outside the class by defining the kernel object and sending the class name as a parameter. The class has to have a static object created inside the class and an interrupt request(Irq\_base) object defined in it. In the constructor of the class it is important to register this object to initial kernel objects. 
+
+The class definition and the registering of kernel object can be seen in listing \ref{kobject}. The new object is called \texttt{RQ\_manager}, which should take care of the ready queue handling.
+
+\begin{lstlisting}[caption={Creating new kernel object},label=kobject, style=customcpp]
+class RQ_manager : public Icu_h<RQ_manager>, public Irq_chip_soft
+{
+  FIASCO_DECLARE_KOBJ();
+  typedef Icu_h<RQ_manager> Icu;
+
+public:
+  enum Operation
+  {
+	RQ_info = 0,
+	Schedule_thread = 1,
+  };
+
+  static RQ_manager rq_manager;
+private:
+  Irq_base *_irq;
+};
+
+FIASCO_DEFINE_KOBJ(RQ_manager);
+
+PUBLIC inline
+RQ_manager::RQ_manager() : _irq(0)
+{
+  initial_kobjects.register_obj(this, 8);
+}
+
+PUBLIC
+L4_msg_tag
+RQ_manager::kinvoke(L4_obj_ref ref, L4_fpage::Rights rights, Syscall_frame *f,
+                   Utcb const *iutcb, Utcb *outcb)
+{
+}
+
+enum Protocol{
+  Label_rq_manager = -22L,   // Protocol ID for rq manager objects<l4_types.cpp>
+}
+enum l4_msgtag_protocol{
+L4_PROTO_RQ_MANAGER = -22L, //Protocol for messages to a rq_manager object<types.h>
+}
+
+static Cap_index const C_rq_manager = Cap_index(8); //kernel-thread-std.cpp
+\end{lstlisting}
+
+This class should implement few of the functions from the inherited classes such as \texttt{icu\_bind\_irq} and \texttt{icu\_set\_mode} and a \texttt{kinvoke} call which the Fiasco uses it to do interprocess communication.
+
+This created kernel object needs to be associate with protocol ID. These protocol IDs are used for either
+kernel implemented objects and this is assigned in the \texttt{l4\_types.h}, protocol section of the
+l4\_msg\_tag and also it needs to be assigned with l4\_msgtag\_protocol. This kernel object is assigned a \texttt{Cap\_index} which it was registered against.

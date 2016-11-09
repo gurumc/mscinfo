@@ -2,14 +2,15 @@
 
 This chapter gives the implementation details for the design presented in Chapter \ref{design}. Code blocks are used at necessary places to give extensive details. The code written as part of the thesis can be accessed in the Github repository \cite{git_synccode}.
 
-This implementation used Genode OS framework 15.11 and Fiasco.OC version %TODO
-The implementation was done in C++ to be compatible with Genode operating system and Fiasco.OC which are both developed in C++. The following sections describe the module implementation.
+This implementation used Genode OS framework 15.11 and was done in C++ to be compatible with Genode operating system and Fiasco.OC, which are both developed in C++. The following sections describe the module implementation.
 
 The first aim was to find access to the ready queue of the scheduler from Genode. The task was to find a L4 API, which has access to the ready queue, unfortunately there existed none. According to the l4-hackers on Fiasco's API level there is no interface to directly access the run queues of processors. The current interface allows to place a thread on a CPU (plus scheduling parameters) and thus add it to one CPU and remove it from another (or initially launch a thread). CPU selection is done using the supplied CPU mask \cite{l4hack}. This forced to come up with a new API that gives access to read/write ready queue to Genode or an high-level application.
 
 The new API should be able to access the ready queue directly. However, this was also not possible due to the way that the ready queue is implemented. The ready queue list is a priviate list inside the ready queue class and there exists a ready queue for each type of scheduler and there are three types of schedulers that can be used in Fiasco.OC namely FP, WFQ and EDF. Morever each processor has its own ready queue which is maintained in Per-CPU variable to synchronize between multiple processor. Inorder to access the ready queue, methods should be provided from ready queue class till Genode applications. So instead of taking the ready queue list all the way upto the Genode/high-level application, the thread to be updated is propagated via series of calls to the ready queue class.
 
-The sequence diagram \ref{fig:sequence_classUpdate} shows the order of the calls taking place from the Genode component synch\_cient to the kernel. At first, the \texttt{Rq\_manager} module is explained which provides the communication mechanism. Then the implementaion of Synch\_client is described.
+The sequence diagram \ref{fig:sequence_classUpdate} shows the order of the calls taking place from the Genode component synch\_cient to the kernel. As shown, \texttt{Rq\_manager} returns the dataspace capability for the \texttt{Synch\_client}'s request and follows the call to Trace service from the \texttt{Synch\_client} for deploying the thread. The L4 deploy API is called from the Trace service with the thread information and scheduler kernel object is called from the L4 API, the scheduler kernel object takes the threads and identifies the scheduler context objects to update to the kernel ready queue.
+
+The following sections explain the coding details of the modules. At first, the \texttt{Rq\_manager} module is explained which provides the communication mechanism. Then the Synch\_client class is described, followed by the kernel design of ready queue update mechanism is explained.
 
 \begin{figure}[h]
 \centering
@@ -18,11 +19,7 @@ The sequence diagram \ref{fig:sequence_classUpdate} shows the order of the calls
 \label{fig:sequence_classUpdate}
 \end{figure}
 
-%TODO explain the sequence diaram here
-%TODO Add articles
-%TODo remove commas from figure
-
-\section{Rq\_manager module}
+\section{Rq\_manager Module}
 
  The class \texttt{Rq\_manager} is the driver class of this component. It creates and maintains multiple ready queues at the user-level component, where each queue is of type Rq\_buffer. The Rq\_buffer is a template class, which implements a circular array by using the Genode dataspace. Each entry in the Genode dataspace is a circular array of type Rq\_task struct, which represents a Genode thread.
 
@@ -105,7 +102,7 @@ The code listing \ref{rqtask} shows the Rq\_task structure which represents an e
 
 The access to this shared dataspace must be synchronized since both the \texttt{Controller} and the \texttt{Synch\_client} use  it. This is done by locks provided from Genode.
 
-\section{Synch\_client module}
+\section{Synch\_client Module}
 The \texttt{Synch\_client} class represents a Genode component which controls the process of scheduler ready queue update. It acts as a client in Genode by using the services of the \texttt{Rq\_manager} and accesses the shared dataspace. The \texttt{Controller} and the \texttt{Synch\_client} interaction is that of a producer-consumer relationship. The producer (\texttt{Controller}) decides and produces(puts it in a buffer) a thread that needs to be executed and consumer(\texttt{Synch\_client}) picks the threads to the kernel ready queue.
 
 %TODO insert flowchart
@@ -143,7 +140,14 @@ One more option to reduce the critical section is to have separate threads worki
  
 \section{Ready queue update Mechanism}
 
-The ready queue update mechanism follows the series of calls which are shown in sequence diagram \ref{fig:sequence_classUpdate}. The following subsections explain the implementation of the modules described in \ref{design:rqupdate}.
+The ready queue update mechanism follows the series of calls, which are shown in sequence diagram \ref{fig:sequence_classUpdate}. The following subsections explain the implementation of the modules described in \ref{design:rqupdate}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\linewidth]{figures/Drawing2}
+\caption{Ready queue update in L4/Fiasco.OC Kernel}
+\label{fig:Drawing2}
+\end{figure}
 
 \subsection{Genode code changes}
 
@@ -152,16 +156,16 @@ Genode should provide a way to the application for calling the L4 API calls. In 
 The \texttt{base/src/trace/trace\_session\_component.cc} contain the API definition, in which it takes a structure argument of threads and calls the L4 scheduler call.
 
 \subsection{L4 API calls} \label{imp:l4api}
-I introduced a new L4 API which can be called from the Genode. The APi takes the following arguments:
+I introduced a new L4 API, which can be called from the Genode. The APi takes the following arguments:
 
 \begin{itemize}
-\item l4\_cap\_idx\_t: It takes a kernel object which is scheduler object.  
+\item l4\_cap\_idx\_t: It takes a kernel object, which is the scheduler object.  
 
-\item l4\_sched\_thread\_list: This is a structure which can be seen in \ref{l4api}, which has an array to hold the list of threads and the priorities for the same threads. 
+\item l4\_sched\_thread\_list: This is a structure, which can be seen in \ref{l4api}, which has an array to hold the list of threads and the priorities for the same threads. 
 
 \end{itemize}
 
-The code listing  \ref{l4api} shows the l4\_sched\_thread\_list structure and the L4 API call which is called from Genode and this code is in \texttt{foc/l4/l4sys/scheduler.h}.
+The code listing  \ref{l4api} shows the l4\_sched\_thread\_list structure and the L4 API call, which is called from Genode and this code is in \texttt{foc/l4/l4sys/scheduler.h}.
 \begin{lstlisting}[caption={L4 scheduler API in scheduler.h},label={l4api}, style=customcpp]
 
 typedef struct l4_sched_thread_list
@@ -180,7 +184,7 @@ l4_scheduler_deploy_thread(l4_cap_idx_t scheduler,
 \end{lstlisting}
 
 The deploy thread function call has to fill the UTCB message registers and make an IPC call to the scheduler kernel object. The first register(mr[0]) is populated with the type of operation that the scheduler should do to with the information, in this case it is L4\_SCHEDULER\_DEPLOY\_THREAD\_OP. The second register is populated using a call to l4\_map\_obj\_control function, which returns a word. This word identifies the kernel objects, which come after this word in the message registers. After the map object control word, thread objects are filled in the message registers in the form of L4 flex pages. An L4 flex page represents a naturally aligned area of mappable space, such as memory, I/O-ports, and capabilities (kernel objects), in this case L4 flex represents thread object.
-For each thread id which is sent an L4 flex page is created and stored in the UTCB message registers. The L4 API makes an IPC call to the kernel scheduler object. 
+For each thread id that is sent, an L4 flex page is created and stored in the UTCB message registers. The L4 API makes an IPC call to the kernel scheduler object. 
 
 The code listing \ref{l4apimp} shows the L4 scheduler API implementation.
 
@@ -201,12 +205,12 @@ l4_scheduler_deploy_thread_u(l4_cap_idx_t scheduler, l4_sched_thread_list thread
   }
 \end{lstlisting}
   
-\section{Fiasco.OC code changes}
+\section{Fiasco.OC Code Changes}
 Fiasco.OC code changes are made in several files to incorporate the ready queue update mechanism in the kernel and following sections explain the code changes in each file.
 
-\subsection{Scheduler.cpp}
+\subsection{Scheduler Class}
 
-The \texttt{l4\_ipc\_call} from the scheduler.h invokes \texttt{kinvoke} function. The first parameter of the UTCB is decoded to find out the operation that is involved in. The operation in this case was set to \texttt{deploy\_thread} and which calls the function \texttt{sys\_deploy\_thread}, which can be seen in code listing \ref{sysdeploycode}. It runs a for loop to get the number of available threads. The associated flex page is derived from the sent items and a look up is performed to obtain the thread objects. The thread objects can be used to obtain the scheduler context which they are associated with. The scheduler context objects are used to create ready queue list(Fp\_list). This list is used to switch the actual ready queue of the scheduler.
+The \texttt{l4\_ipc\_call} from the scheduler.h invokes \texttt{kinvoke} function. The first parameter of the UTCB is decoded to find out the operation that is involved in. The operation in this case was set to \texttt{deploy\_thread}, which calls the function \texttt{sys\_deploy\_thread}, which can be seen in code listing \ref{sysdeploycode}. It runs a for loop to get the number of available threads. The associated flex page is derived from the sent items and a look up is performed to obtain the thread objects. The thread objects can be used to obtain the scheduler context, which they are associated with. The scheduler context objects are used to create ready queue list(Fp\_list). This list is used to switch the actual ready queue of the scheduler.
 
 The specified ready queue of the CPU can be obtained if the CPU was specified from the \texttt{Controller} otherwise the ready queue of the threads home CPU can be used. The current implementation creates and works with fixed priority list, however, this can be extended easily to create the corresponding ready queue list. If there is only one thread the \texttt{ready\_enqueue} function can be called instead of exchanging the complete list.
 
@@ -264,7 +268,7 @@ Scheduler::sys_deploy_thread(L4_fpage::Rights, Syscall_frame *f, Utcb const *utc
 }
 \end{lstlisting}
 
-\subsection{sched\_context-fp\_EDF.cpp}
+\subsection{Ready\_queue\_base Class}
 
 This class implements the major functionalities to handle the ready queues. This class contains the lists of both FP ready queue and EDF ready queue and serves as a wrapper class to both type of lists. Any call made to access the either of the ready queue, goes through this class. The decision to call the specific ready queue function is made according to the type of the scheduler in use.
 
@@ -279,20 +283,20 @@ Sched_context::Ready_queue_base::switch_rq(Fp_list *list, unsigned prio)
 }
 \end{lstlisting}
 
-\section{Synchronization method}\label{imp:sync}
+\section{Synchronization Method}\label{imp:sync}
 
-The ready queue contains the scheduler contexts which belongs to the threads and which can run next. Modifying the ready queue list is a critical section and mutual exclusive access must be guaranteed. In a uniprocessor implementation this can work with the CPU lock, which disables the interrupts on the local CPU and no other threads will get CPU time in the middle of ready queue manipulation. For SMP systems the kernel must use a ready list local to the CPU and advantages of using the per CPU data is explained in the section \ref{foundations}. Fiasco.OC implements a per CPU variable which is used towards synchronization. When using per CPU variable the exclusive access to this variable is guaranteed by disabling the CPU preemption and once the access is finished the CPU preemption is enabled. By this way, if any CPU is in the middle of critical section, no thread is allowed to replace the current operation. 
+The ready queue contains the scheduler contexts that are part of the threads and can run next. Modifying the ready queue list is a critical section and mutual exclusive access must be guaranteed. In a uniprocessor implementation this can work with the CPU lock, which disables the interrupts on the local CPU and no other threads will get CPU time in the middle of ready queue manipulation. For SMP systems the kernel must use a ready list local to the CPU and advantages of using the per CPU data is explained in the section \ref{foundations}. Fiasco.OC implements a per CPU variable that is used towards synchronization. When using per CPU variable the exclusive access to this variable is guaranteed by disabling the CPU preemption and once the access is finished the CPU preemption is enabled. By this way, if any CPU is in the middle of critical section, no thread is allowed to replace the current operation. 
 
-The present method uses the per CPU variable method where it locks the CPU before exchanging the CPU list. The software transaction memory method was implemented but testing that method was a problem since using of SMT forces the GCC compiler required pthreads library to be present which was not possible to include to Fiasco.OC. The SMT method would eliminate the necessary to preempt the CPU since it executes all the exchange the instructions in one transaction.
+The present method uses the per CPU variable method where it locks the CPU before exchanging the CPU list. The software transaction memory method was implemented but testing that method was a problem since using of SMT forces the GCC compiler required pthreads library to be present, which was not possible to include to Fiasco.OC. The SMT method would eliminate the necessary to preempt the CPU since it executes all the exchange the instructions in one transaction.
 
 A check is made in scheduler.cpp to find out if the ready queue is empty. If the ready queue is empty or it contains the idle thread then the immediate call is made to exchange the list. The static point in time method is to check if a thread from this ready list getting executed, if the thread is running
 the exchange call waits till the scheduler takes the control back and thread list is exchanged. This is checked in the call from \texttt{schedule\_in\_progress} flag. 
 
 
-\subsection{Ready\_queue\_fp.cpp}
-Hereinafter the list that is sent is referred as new list and the list to be exchanged is referred as old list. Once the fixed priority ready queue is decided to be exchanged the new list and the priority is sent to the \texttt{switch\_rq} function from sched\_context-fp\_EDF class. It is assumed at this point that the new list contains the threads that are necessary to execute the threads, which include the idle thread, pager threads. The Fiasco.OC uses an idle thread which keeps the CPU busy when there are no threads are to be executed. The idle thread needs to be kept in the new list if it's not existing already. The old list can be used to identify the idle thread, which sits in the end of the old list. The pager thread is nece
+\subsection{Ready\_queue\_fp Class}
+Hereinafter the list that is sent is referred as new list and the list to be exchanged is referred as old list. Once the fixed priority ready queue is decided to be exchanged the new list and the priority is sent to the \texttt{switch\_rq} function from sched\_context-fp\_EDF class. It is assumed at this point that the new list contains the threads that are necessary to execute the threads, which include the idle thread, pager threads. The Fiasco.OC uses an idle thread, which keeps the CPU busy when there are no threads are to be executed. The idle thread needs to be kept in the new list if it's not existing already. The old list can be used to identify the idle thread, which sits in the end of the old list. The pager thread is nece
 
-The exchange of the list is a simple operation of changing the head pointers. The cyclic list is implemented in a file called \texttt{dlist}. I implemented a a function \texttt{exchange} which takes the list to be exchanged with the present list and sets the head of the old list to the new list. 
+The exchange of the list is a simple operation of changing the head pointers. The cyclic list is implemented in a file called \texttt{dlist}. I implemented a function \texttt{exchange}, which takes the list to be exchanged with the present list and sets the head of the old list to the new list. 
 
 The listing \ref{rq_exchange} shows the \texttt{switch\_rq} function.
 
@@ -315,59 +319,4 @@ The listing \ref{rq_exchange} shows the \texttt{switch\_rq} function.
    		return true;
    	}
  
-\end{lstlisting} 
-
-\section{Creating a new kernel object in Fiasco.OC}\label{implement:kernelobject}
-In this section creating a new kernel object is explained, that can be utilized to make a dedicated work in the kernel. The following changes are required to create kernel object and compile it. A new class should be created, which inherits \texttt{Icu\_h<object name>} and
-\texttt{Irq\_chip\_soft} classes. The class has to declare this as kernel object using a macro (FIASCO\_DECLARE\_KOBJ()) provided from Fiasco.OC and the memory is allocated outside the class by defining the kernel object and sending the class name as a parameter. The class has to have a static object created inside the class and an interrupt request(Irq\_base) object defined in it. In the constructor of the class it is important to register this object to initial kernel objects. 
-
-The class definition and the registering of kernel object can be seen in listing \ref{kobject}. The new object is called \texttt{RQ\_manager}, which should take care of the ready queue handling.
-
-\begin{lstlisting}[caption={Creating new kernel object},label=kobject, style=customcpp]
-class RQ_manager : public Icu_h<RQ_manager>, public Irq_chip_soft
-{
-  FIASCO_DECLARE_KOBJ();
-  typedef Icu_h<RQ_manager> Icu;
-
-public:
-  enum Operation
-  {
-	RQ_info = 0,
-	Schedule_thread = 1,
-  };
-
-  static RQ_manager rq_manager;
-private:
-  Irq_base *_irq;
-};
-
-FIASCO_DEFINE_KOBJ(RQ_manager);
-
-PUBLIC inline
-RQ_manager::RQ_manager() : _irq(0)
-{
-  initial_kobjects.register_obj(this, 8);
-}
-
-PUBLIC
-L4_msg_tag
-RQ_manager::kinvoke(L4_obj_ref ref, L4_fpage::Rights rights, Syscall_frame *f,
-                   Utcb const *iutcb, Utcb *outcb)
-{
-}
-
-enum Protocol{
-  Label_rq_manager = -22L,   // Protocol ID for rq manager objects<l4_types.cpp>
-}
-enum l4_msgtag_protocol{
-L4_PROTO_RQ_MANAGER = -22L, //Protocol for messages to a rq_manager object<types.h>
-}
-
-static Cap_index const C_rq_manager = Cap_index(8); //kernel-thread-std.cpp
 \end{lstlisting}
-
-This class should implement few of the functions from the inherited classes such as \texttt{icu\_bind\_irq} and \texttt{icu\_set\_mode} and a \texttt{kinvoke} call which the Fiasco uses it to do interprocess communication.
-
-This created kernel object needs to be associate with protocol ID. These protocol IDs are used for either
-kernel implemented objects and this is assigned in the \texttt{l4\_types.h}, protocol section of the
-l4\_msg\_tag and also it needs to be assigned with l4\_msgtag\_protocol. This kernel object is assigned a \texttt{Cap\_index} which it was registered against.

@@ -2,4 +2,16 @@
 
 %TODO: Abstract
 
+%Motivation/Problem statement Aims and objectives
 
+The thesis is part of the KIA4SM project.  The KIA4SM project uses Observer-Controller architecture of the organic-computing paradigm. 
+
+The Observer monitors the system and gathers the data and pass it to the Controller, which processes the data and takes a decision to schedule the tasks. This requires a method in place to provide the synchronized access to ready queue and update the tasks.
+
+%vision of providing a homogeneous execution environment for heterogeneous hardware systems involves in using universally applicable ECUs and having flexible task scheduling on ECUs. This requires having a intelligent system in place to take decisions, which is solved by Organic-Computing paradigm's Observer-Controller architecture, which has an Observer that monitors the system and gathers the data and pass it to the Controller, which processes the data and takes a decision to schedule the tasks. This requires a method in place to provide the synchronized access to ready queue and update the tasks.
+
+%What does the thesis do?
+This thesis aims to develop a method for updating the task ready queues in Genode Operating System Framework and L4/Fiasco.OC microkernel. The limitations in accessing the kernel ready queue from a high-level component led to the development of a split module. Accordingly, a high-level component was developed to handle the communication with the Controller and a kernel module to update the ready queue. The high-level component talks to the Controller and receives the tasks to be updated and then passes them to the kernel module to update the threads. The kernel module identifies the corresponding kernel threads and updates them to the ready queue. Various synchronization methods are presented in this thesis with special importance to lock-free algorithms. RCU and STM synchronization methods are suggested for synchronizing the kernel ready queue access. 
+
+%Findings and conclusions
+Tests of the task-ready queue update mechanism showed that the threads can be updated successfully to the ready queue and executed. On the other hand, complete ready queue swapping leaves the system in an unstable state. The high-level component is able to communicate successfully with the Controller via Genode's shared dataspace. The proposed design and implementation can be successfully used in the Observer-Controller architecture and it serves as a good starting point for the KIA4SM project's goal of having the ready queue update mechanism as a fully high-level component.
