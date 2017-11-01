@@ -3,7 +3,7 @@
 
 \chapter{Introduction}\label{chapter:introduction}
 
-The implemented low-level synchronization component in this Master's thesis is part of the KIA4SM project of the Chair of Operating Systems. The work aims to implement a method for dynamic update of task ready queues in L4 Fiasco.OC/Genode while providing a synchronized access to them.
+The implemented synchronization component in this Master's thesis is part of the KIA4SM project of the Chair of Operating Systems. The work aims to implement a method for dynamic update of task ready queues in L4 Fiasco.OC/Genode while providing a synchronized access to them.
 
 
 \section{Overview of KIA4SM project}
@@ -14,12 +14,11 @@ The final vision of the project is illustrated in figure \ref{kia4sm}. The goals
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale = 1]{figures/kia4sm_vision.png}
+  \includegraphics[scale = 0.8]{figures/kia4sm_vision.png}
   \caption{KIA4SM vision - homogeneous platform for heterogeneous be it  factors andT devices \cite{kia4sm}} \label{kia4sm}
 \end{figure}
 
 \begin{itemize}
-%TODO rework
 \item Providing a device independent platform. The different devices include vehicles, mobile devices of users and the supported devices for traffic and transport management.
 
 \item Providing a mechanism for online dynamic reconfiguration, based on migration of software functionality, having a adaptive routing policy and flexible scheduling of tasks on the ECUs.

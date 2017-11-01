@@ -116,14 +116,14 @@ The call is then transferred to the \texttt{Ready\_queue} class. The type of the
 
 Additionally, this module has to provide a synchronized access to the ready queue. The synchronization method used is explained in \ref{imp:sync}. 
 
-\subsection{Finding the Right Time for RQ update}
+\subsection{Finding the Right Time for Ready Queue Update}\label{design:time}
 Finding the right point for synchronization is a big challenge. Since this toolchain is used on a safety critical system, care should be taken to ensure that the system remains in a safe and predictable state. Theoretically, the points for safe update of the ready queue are:
 
 \begin{itemize}
-\item Empty Run Queue: If the run queue is empty, exchanging the list is easy since no threads exist in the ready queue. In case there is a single thread in the queue, the thread must be an idle thread. So, in the idle thread and empty queue cases,it is safe to exchange the entire ready queue list with a new list. A CPU lock is used to disable the thread preemption and the ready queue list is exchanged.
+\item Empty ready-queue: If the run queue is empty, exchanging the list is easy since no threads exist in the ready queue. In case there is a single thread in the queue, the thread must be an idle thread. So, in the idle thread and empty queue cases,it is safe to exchange the entire ready queue list with a new list. A CPU lock is used to disable the thread preemption and the ready queue list is exchanged.
 
-\item Static point in time: In this method, the \texttt{Controller} decides which thread should be allowed to complete its execution before exchanging the ready queue list. The controller can either wait or preempt the currently executing thread.
+\item Static point-in-time: In this method, the \texttt{Controller} decides which thread should be allowed to complete its execution before exchanging the ready queue list. The controller can either wait or preempt the currently executing thread.
 
-\item Variable point in time: In this method, the synchronization mechanism is used is such way that it takes a decision to pick the best to update the ready queue. If RCU is used, then the update happens after the grace period. If STM is used the transaction is committed if there is no thread is accessing the ready queue (see \ref{rq:sync}).
+\item Variable point-in-time: In this method, the synchronization mechanism is used is such way that it takes a decision to pick the best to update the ready queue. If RCU is used, then the update happens after the grace period. If STM is used the transaction is committed if there is no thread is accessing the ready queue (see \ref{rq:sync}).
 
 \end{itemize}

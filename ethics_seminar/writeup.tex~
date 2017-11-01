@@ -1,0 +1,252 @@
+\documentclass[11pt, article]{scrartcl}
+\usepackage [english]{babel}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usetikzlibrary{snakes}
+\usetikzlibrary{patterns}
+\usepackage[loose]{subfigure}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+
+
+\geometry{margin=2.75cm}
+
+\title{Niels Bohr}
+\subtitle{Seminar Scientists and Ethics}
+\author{Gurusiddesha Chandrasekhara}
+\date{\today}
+
+\begin{document}
+\maketitle
+Abstract - Niels Bohr was a Danish physicist who is generally regarded as one of the
+intellectual and influential physicists of the $20^{th}$ century. Bohr is not only known for
+understanding atomic structure and quantum theory but also for his great philosophical understandings.
+He was a promoter of scientific research who enjoyed working with great minds and allowed many
+scientists to grow in their own field through his physics institute. In this article 
+I will describe his life history and his contributions to not only to physics but to 
+the entire society.
+
+\tableofcontents
+\newpage
+
+\section{Early Life and Education} %Till his marriage and all the life activities - 2 pages
+
+\subsection{Childhood}
+Niels Henrik David Bohr was born in Copenhagen on October 7, 1885, as the son of Christian
+Bohr, a professor of physiology at the University of Copenhagen and was nominated twice for 
+the Nobel prize\cite{father}, and Ellen Adler Bohr, who came from a wealthy Jewish Sephardic family prominent in Danish banking and parliamentary circles \cite{mother}.
+Bohr was the second of the three children to his parents. He had an elder sister Jennifer,
+ who became a teacher and younger brother Herald who became a mathematician and Olympic footballer\cite{brother}.
+
+It comes as no surprise that Niles and his siblings grew up in an atmosphere most
+favorable to the development of interest in academics. A famous biographer Kennedy writes as\cite{kennedy}
+
+"Niels, Harald, and their older sister, Jenny, grew up
+in a cultured and stimulating home. From their earliest days they were exposed to a world of
+ideas and discussion, of conflicting views rationally and good-temperedly examined, and they
+developed a respect for all who seek deeper knowledge and understanding".
+
+Bohr started his schooling when he was seven years old in Gammelholm Latin school in and finished his Studenterexamen in 1903\cite{kennedy}.
+He did well at school but was never a topper of school, usually coming in third or fourth place. He excelled in physical education and was an excellent soccer player but he never made to the national football team unlike his brother who won silver medal while playing for Denmark \cite{brother}.
+Bohr was a passinate foorballed too, he and his brother played several matches for
+Akademisk Boldclub(Academic Football Club). Niel played as a goalkeeper for the team.
+He made many friends at school but his brother was his best friend throughout his life. 
+
+During his last two years at school Niels studied mathematics and physics. He soon realized
+that mathematics teacher did not have a good grasp on the subject and became somewhat
+frighted of Bohr's exceptional skills. In physics too he studied the lessons ahead of the
+class and found errors in them. Although his father being physiologist, he was largely responsible for developing Niel's interest in physics.\cite{physics}
+He wrote in 1922 "My interest in the study of physics was awakened while I was still in school, largely owing to the influence of my father"\cite{kennedy}.
+
+
+\subsection{University Education}
+Bohr started his university education in 1903 at the University of Copenhagen \cite{kennedy}. He studied
+physics as his main subject but took mathematics, astronomy, chemistry as minor subjects.
+He studied physics under Christian Christiansen, the only physics professor at that time
+in the university. Bohr also studied Philosophy under Harald Hoffding. He had known both of them for many years as they were close friends of his father. 
+Mathematics was taught at university by Thorvald Thiele\cite{kennedy}.
+
+\texttt{Gold Medal Competition:}
+	In 1905, a gold medal competition was sponsored by the Royal Danish Academy of Sciences and
+	Letters to investigate a method for measuring the surface tension of liquids\cite{archives}. This theory
+	was proposed by Lord Rayleigh in 1879. This involved measuring the frequency of oscillation
+	of the radius of water jet. But there was no physics lab at the university to conduct
+	experiments for Bohr, he used his father's laboratory to conduct a series of experiments.
+	He made his own glassware, creating the test tubes of required elliptical cross sections. He went beyond the originals task of 
+	measuring the surface tension and incorporated improvements to Rayleigh's theory by taking into account of viscosity of water. 
+	He submitted his essay in the last minute and won the prize. He later submitted an improved version of the paper to the Royal 
+	Society in London for publication in  Philosophical Transactions of the Royal Society \cite{student}.
+
+\texttt{Master's Degree and PhD:}
+ Bohr earned his master's degree in 1909 \cite{kennedy}. For master's degree he had to submit a thesis which he did it under the supervision of Christiansen
+ on the topic of "Electron theory of metals". Later he elaborated his thesis to obtain Doctor of Philosophy. After the literature survey he settled on a model postulated by Paul Drude
+ and elaborated by Hendrik Lorentz, in which electrons in a metal are considered to behave like gas. After he took Lorentz's model, he was still unable to explain Hall effect,
+ and concluded that electron theory could not completely explain the magnetic properties of metals, for which obtained his PhD in 1911. Although his theory was groundbreaking it brought a 
+ little attention to the scientific community of the world since the thesis was written in Danish which was university requirement at that time. In 1921 a Dutch physicist Hendrika Johana Van 
+ Leeuwen derived a theorem using Bohr's work which is known as Bohr-Van Leeuwen theorem \cite{bomb2}.
+
+ \texttt{Marriage:}
+ Bohr met Margrethe Norlund in 1910 \cite{student}, sister of famous mathematician Niles Erik Norlund. They both fell in love and decided to marry. Bohr resigned his church membership and married Margrethe 
+ in August 1912. It worked so well for both of them that Bohr dicated and Margrethe wrote the papers and she was the reason that Bohr improved his english as well \cite{atom}. They had six sons, the elder Christian died in boating accident and Herald died in his childhood because of meningitis. Aage Bohr became a physicist and won nobel prize 
+ in physics like his father. Hans became a physician, Erik a chemical engineer and Ernst a lawyer and Olympic footballer. 
+
+\subsection {Philosophy}
+	When Bohr was in university he studied philosophy under Harald Hoffding \cite{phil}, mostly he read Christian existentialist philosopher, Søren Kierkegaard. 
+	He sent his brother "Stages on Life's Way", book written by Kierkegaard as a birthday gift \cite{hoffding}, Bohr was atheist but loved his writings \cite{atheist}.
+	Many of the Bohr's theories and explanations are philosophical in nature which are beautifully captured in Murdoch's book "Niels Bohr's Philosophy of Physics" \cite{phyphil}. 
+	
+	The famous Bohr-Einstein debates on quantum mechanics are greatly studied because of their philosophical nature \cite{debate}. 
+
+\section{Contribution to Physics} % purely his contributions - about a page
+    Bohr has a lot of contribution to physics below I will be discussing a few of them.
+\subsection {Bohr Atomic Model}
+	Bohr wanted to travel to England since most of theoretical work on structure of atoms and molecules was being done \cite{atommodel}. In May 1911 he applied for a travell
+	grant to Carlsberg Foundation, and once the grant was made he went to England in September 1911 to work with Sir J J Thomson at University of Cambridge.
+	He wanted to spend his time in Cambridge and did some research on cathode rays, but J. J. Thomson was not impressed by his work \cite{love}. At the same time he got the
+	invitation from Ernest Rutherford, Bohr moved to Victoria University, Manchester (now known as University of Manchester) accepting Rutherford's invitation \cite{model}.
+
+	In Manchester Bohr worked with Rutherford's group on the structure of atom \cite{kennedy}.
+	Rutherford became Bohr's role model for both his personal and scientific
+	qualities. Bohr used quantum ideas of Plank and Einstein, conjectured that an atom could exist only in discrete set of stable energy states. Bohr kept
+	writing his progress to his brother Herald in a series of letters \cite{archives}. On $13^{th}$ July he writes, 
+	"Things are going rather well, for I believe I have found out a few things; but, to be sure, I have not been so quick to work them out as I was stupid to think. 
+	I hope to have a little paper ready and to show it to Rutherford before I leave, and I therefore am so busy, so busy" \cite{kennedy}. 
+
+	The letters indicate how Bohr kept his contact with his brother in professional level and also his interest and restlessness to bring out the paper.
+
+	On $24^{th}$  July 1912, with his paper still unfinished, Bohr left Rutherford's group in Manchester to accept the position of privadocent in University of 
+	Copenhagen but continued work on his theory of the atom and completed the work in 1913. He published three papers, which later became famous as
+	"the triology" \cite{kennedy} were published in Philosophical Magazine in July, September and November 1913. He adapted Rutherford's nuclear structure to Max
+	Planck's quantum theory, and created so called "Bohr model of the atom" \cite{atom}. He advanced the idea of electrons traveling around the nucleus, and
+	chemical property is determined by the number of atoms in the outer orbit. He introduced the idea that an electron can jump from higher energy 
+	orbit to lower one in the process of emitting a quantum discrete energy known as photons. This became the basis for old quantum theory. 
+	Many older physicists did not like Bohr's triology, including Thomson, Rayleigh and Hendrik Lorentz, but younger generation scientists saw it as 
+	breakthrough including  Rutherford, David Hilbert, Albert Einstein, Max Born and Arnold Sommerfeld \cite{bomb2}. 
+
+	Around the same time Bohr was appointed as docent and he was teaching medical students, but he did not like teaching them and he filed a petition to open 
+	a theoretical physics chair at the University \cite{insti}. Although the faculty of the university recommended him for the founding professor of the chair, 
+	Bohr did not see any progress. He accepted Rutherford's invitation to be a Schuster Reader at the Manchester group. 
+
+	Bohr took a leave of absence from the university and started his journey towards England by taking a holiday, at that time he visited the University of
+	Göttingen and the Ludwig Maximilian University of Munich \cite{bomb2}, where he met Sommerfeld and conducted seminars on the trilogy. The First World War broke
+	out when they were in Tyrol, Italy, which made it very difficult for them to come back to Denmark. Bohr and his wife traveled to England via
+	Scotland in a ship. Bohr stayed in Manchester till July 1916, by which time he had been appointed as Chair of Theoretical Physics at the University of Copenhagen. 
+
+\subsection {Institute of Physics}
+	In 1917, Bohr was elected to Royal Danish Academy of Sciences. He began to plan for an Institute of Theoretical Physics in Copenhagen, which opened on $3^{rd}$ march 1921, 
+	now known as Niels Bohr institute \cite{insti}. Bohr's institute served as home for several physicists who were working on quantum
+	mechanics and related subjects and few papers were produced from it before it even officially opened. The Bohr model worked well for hydrogen,
+	but failed for many complex elements for which Bohr created heuristics to explain them. The rare earth elements posed a classification problem
+	for chemists, because of their similar chemical properties \cite{bomb2}. An important development which put Bohr's theory on a firm theoretical footing was 
+	Pauli's exclusion principle by Wolfgang Pauli, which helped Bohr to declare element 72 as undiscovered. French chemist Georges Urbain challenged
+	Bohr and said to have found element 72, which he called "celtium". At the Institute in Copenhagen, Chemists took the challenge to prove Ubrain
+	wrong and searched in for element 72 and found it, which is later named as Hafnium (Hafnia is Latin name for Copenhagen) \cite{hafnium}.
+
+	In 1922, Bohr was awarded the Nobel Prize in Physics "for his services in the investigation of the structure of atoms and of the radiation emanating from them" \cite{prize}. 
+	Award recognized both his work on structure of atoms and his earlier work in quantum mechanics. For his Nobel lecture, Bohr gave his audience a comprehensive survey 
+	of what was then known about the structure of the atom, including the correspondence principle, which he had formulated.
+
+	There were many discoveries from the institute with many scientists from across the world working there, the prominent once are Bohr–Kramers–Slater theory and Heisenberg's uncertainty principle.
+
+\subsection {Quantum Mechanics}
+	In 1925 George Uhlenbeck and Samuel Goudsmit introduced spin concept for electrons. But Bohr had concerns with the effect of magnetic field to
+	this theory. Later he came to know that Einstein had resolved this with with theory of relativity. Bohr arranged Heisenberg to come back to
+	the institute and work with him in 1926, (earlier Heisenberg worked there between 1924 and 1925) where he remained until 1927. Bohr became
+	convinced that light behaves both particles and waves  and in 1927, experiments confirmed the DE Broglie hypothesis that matter (like
+	electrons) also behaved like waves. He conceived the philosophical principle of complementarity: that items could have apparently mutually exclusive properties, 
+	such as being a wave or a stream of particles, depending on the experimental framework. In Copenhagen in 1927 Heisenberg developed his uncertainty principle, 
+	which Bohr encouraged. These theories became the basis for quantum mechanics.  
+
+\section{Involvement in World War II} % about 2 pages
+	The rise of Nazism in Germany made many scholars leave their countries, the main reasons were either they were Jewish or they were political
+	opponents. In 1933 Bohr helped many scientists through Rockefeller Foundation. He talked to the President Max Mason during his visit to United
+	States. Bohr provided them temporary positions and financial support in the institute and later finding them permanent positions across the world. 
+	By this Bohr displayed great deal of how much he cared about the scientific community. 
+
+	In April 1940, Nazi Germany invaded Denmark and occupied them. There were Nobel gold medals at the institute which belonged to Max von Laue
+	and James Franck. Bohr had de Hevesy dissolve them in aqua regia and later when the war was over they gold was precipitated and re-struck by
+	Nobel Foundation. Bohr kept the institute running but many scholars had left the institute.
+
+\subsection {Meeting with Heisenberg}
+    In September 1941, Werner Heisenberg, visited Niels Bohr in Copenhagen \cite{bomb2}. Heisenberg had become the head of German nuclear
+    project at that time. Prior to this meeting Bohr was aware of the possibility of using uranium-235 to construct an atomic bomb but he did 
+    not think the it is feasible to extract a sufficient quantity of uranium-235 at that time due to technical difficulties \cite{war}. During this meeting
+    Bohr and Heisenberg took a private chat outside the meeting hall. Which later caused much speculation about the content of the private chat,
+    since Both of them gave different version when asked about it. 
+
+    In 1957, Heisenberg wrote to Robert Jungk, who was then working on the book Brighter than a Thousand Suns: A Personal History of the Atomic
+    Scientists. Heisenberg explained that he had visited Copenhagen to communicate to Bohr the views of several German scientists, that
+    production of a nuclear weapon was possible with great efforts, and this raised enormous responsibilities on the world's scientists on both
+    sides. When Bohr saw Jungk's depiction in the Danish translation of the book, he drafted (but never sent) a letter to Heisenberg\cite{archives}, stating
+    that he never understood the purpose of Heisenberg's visit, was shocked by Heisenberg's opinion that Germany would win the war, and that
+    atomic weapons could be decisive. Brief content of the letter translated to English goes like this "I have seen a book, “Stærkere end tusind
+    sole” (“Brighter than a thousand suns”) by Robert Jungk, recently published in Danish, and I think that I owe it to you to tell you that I am
+    greatly amazed to see how much your memory has deceived you in your letter to the author of the book...".
+
+    The meeting brought so much attention that, Michael Frayn's wrote a drama on the meeting thinking that what might have happened at 1941\cite{drama}.
+    A BBC television film version of the play was first screened on $26^{th}$ September 2002. The same meeting had previously been dramatized by the
+    BBC's Horizon science documentary series in 1992.
+
+\subsection {Escape to England}
+    In September 1943, Nazis considered Bohr's family to be Jewish (since his mother came from Jewish family) \cite{war}. Bohr heard this and thinking that
+    they would be arrested, he planed to leave the country. The Danish resistance helped Bohr and his wife escape by sea to Sweden on $29^{th}$
+    September. It is known that, Bohr persuaded King Gustaf V of Sweden to make public announcement in the radio that Sweden would provide asylum
+    to Jewish refugees. After the announcement on $2^{nd}$ October 1943, helped mass rescue of Danish Jews. This has been topic of debate that 
+    Bohr could have done more to his countrymen but his actions were not decisive on wider events \cite{bomb2}. 
+
+    News of Bohr's escape to Sweden reached Britain, Lord Cherwell asked Bohr to come to Britain \cite{bomb2}. Bohr arrived in Scotland on $26^{th}$ October in a de
+    Havilland Mosquito operated by the British Overseas Airways Corporation (BOAC). The Mosquitos were unarmed high-speed bomber aircraft that
+    had been converted to carry small, valuable cargoes or important passengers. The special quality of these aircrafts they fly at high
+    altitudes and able to cross Norway which was occupied by Germans, and yet avoid German fighters. Bohr, equipped with parachute, flying suit
+    and oxygen mask, spent the three-hours in flight lying on a mattress in the aircraft's bomb bay. During the flight, Bohr could not wear
+    helmet as it was too small for his, and consequently did not hear the pilot's intercom instruction to turn on his oxygen supply when the
+    aircraft climbed to high altitude to overfly Norway. He became unconsious oxygen starvation and only revived when the aircraft descended to
+    lower altitude over the North Sea. Bohr's son Aage followed his father to Britain on another flight a week later, and became his personal
+    assistant.
+\subsection {Involvement in Manhattan project}
+    Bohr was warmly received in England and given a job at British Tube Alloys nuclear weapons development team. Bohr later went to United
+    States as Tube Alloy's consultant, with his son Aage as his assistant. Due to the security concerns he went with under cover name as
+    "Nicholas Baker" and Aage as "Jam2 Euro eaches Baker"\cite{bomb2}. When Bohr arrived at Washington D.C, he met the director of Manhattan Project, Brigadier
+    General Leslie R.Groves, Jr. He visited Los alamos in New Mexico where the nuclear weapons were being designed. Bohr did not stay in Los alamos but paid a series of extended visits
+    for next couple of years.  Robert Oppenheimer who was the head of the project and regraded as father of atomic bombs credited Bohr with
+    acting "as a scientific father figure to the younger men" \cite{bomb2}, most notably Richard Feynman. Bohr is quoted as saying, "They didn't need my 
+    help in making the atom bomb" \cite{bomb}. Oppenheimer gave Bohr credit for an important cont2 Euro eachribution to the work on modulated neutron initiators. 
+    "This device remained a stubborn puzzle", Oppenheimer noted, "but in early February 1945 Niels Bohr clarified what had to be done".
+
+    In early 1944, Bohr recieved a letter from Peter Kapitza, inviting him to come to Soviet Union. He sent Kapitza a non-commital response
+    which he showed the British authorities before posting \cite{archives}. Bohr wanted to share the idea with the Soviets but president Churchill disagreed
+    the idea, later he convinced Franklin D.Roosevelt to convince Churchill on sharing (which was also the idea of Oppenheimer) \cite{war}. But when
+    Roosevelt and churchill met they both discarded the idea and ordered that "enquiries should be made regarding the activities of Professor
+    Bohr and steps taken to ensure that he is responsible for no leakage of information, particularly to the Russians" \cite{bomb}.
+
+\section{Later Years}
+	After the war is over in June 1950, Bohr wrote an "Open Letter" to United Nations calling international cooperation on nuclear energy\cite{letter}, 
+	which is gaint leap to mankind on agreeing to cooperate on nuclear energy which proved to be lethal and decisive weapon in the Second World War. Bohr took such
+	a great initiative which suggests his concerns. Later International Atomic Energy Agency was created along the lines 
+	of Bohr and he recieved the first ever Atoms for Peace Award in 1957 for his efforts. 
+
+	After the war ended Bohr returned to University of Copenhagen in 1945 and he was re-elected as the president of Royal Danish academy of Arts and Science. 
+	Later in his career Bohr held high positions in various institutions most notably,  Chairman of Nordic Institute for Theoretical
+	Physics in 1957 and Founding chairman of Research Establishment Risø of the Danish Atomic Energy Commission \cite{final}.
+
+	Bohr died of heart attack in his home in Carlsberg on $18^{th}$ November 1962. On $7^{th}$ October 1965, on what would have been his 80th birthday, the
+	Institute was officially renamed to what it had been called unofficially for many years: the Niels Bohr Institute\cite{archives}.
+
+\section{Conclusion}
+	Niels Bohr was one of great minds of the $20^{th}$  century, his life is filled with lots of contributions to science and also to humanity.
+	He was one of the scientists who lived his life for the betterment of society and upheld his philosophical nature through his working style. 
+	People loved to work with him and he is well known for promoting people with abilities to excel. His ethics and philosophy were questioned
+	because of his involvement in the making of atomic bombs. Bohr lived a happy life with his wife Margrethe, who 
+	supported him throughout his career. Bohr was never known to be gifted with extraordinary abilities but he was a kid who wanted to excel and
+	had a strong desire to pursue knowledge and thus remained an exceptional personality.
+
+\bibliographystyle{plain}
+\bibliography{writeup}
+\end{document}
+
+
